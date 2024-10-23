@@ -1,10 +1,12 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import Button from './Button';
 
 function App() {
   return (
     <div className="App">
+      <Button onClick={() => console.log('clicked')} label="Click me" />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
