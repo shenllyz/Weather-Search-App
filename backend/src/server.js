@@ -1,29 +1,66 @@
 import express from "express";
 import cors from "cors";
-import { run } from './mongodb.js';
+import axios from "axios";
+import dotenv from "dotenv";
+import { run } from "./mongodb.js";
+
+console.log("Loading environment variables...");
+dotenv.config();
+console.log("Environment variables loaded.");
+
 const app = express();
+const tomorrowAPIkey = process.env.TOMORROW_API_KEY;
+console.log("Tomorrow API Key:", tomorrowAPIkey); // This should print the API key
 
 app.use(cors());
-app.get('/', (req, res) => {
-  res.send('Hello from App Engine!');
-});
-
 run().catch(console.dir);
 
-// write a sample test api
-app.get('/api', (req, res) => {
+app.get(['/', '/index'], (req, res) => {
   res.send('Hello from App Engine!');
 });
 
-// write an api to return a HTML page
-app.get('/api/html', (req, res) => {
-  res.send('<h1>Hello from App Engine!</h1>');
+app.get('/get_weather', async (req, res) => {
+  const address = req.query.address || 'University of Southern California, CA';
+  const latitude = req.query.latitude;
+  const longitude = req.query.longitude;
+
+  const url = 'https://api.tomorrow.io/v4/timelines';
+  const params = {
+    location: `${latitude},${longitude}`,
+    apikey: tomorrowAPIkey,
+    fields: [
+      "temperature",
+      "temperatureApparent",
+      "temperatureMin",
+      "temperatureMax",
+      "windSpeed",
+      "windDirection",
+      "humidity",
+      "pressureSeaLevel",
+      "uvIndex",
+      "weatherCode",
+      "precipitationProbability",
+      "precipitationType",
+      "sunriseTime",
+      "sunsetTime",
+      "visibility",
+      "moonPhase",
+      "cloudCover"
+    ],
+    timezone: "America/Los_Angeles",
+    timesteps: ["1h", "1d"],
+    units: "imperial"
+  };
+
+  try {
+    const response = await axios.get(url, { params });
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve weather data" });
+  }
 });
 
-
-
-// Listen to the App Engine-specified port, or 8080 otherwise
 const PORT = process.env.PORT || 8001;
-app.listen(PORT, () => {
+app.listen(PORT, () => {  
   console.log(`Server listening on port ${PORT}...`);
 });
