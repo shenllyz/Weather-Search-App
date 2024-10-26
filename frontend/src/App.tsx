@@ -6,7 +6,7 @@ import Button from './Button';
 function App() {
   return (
     <div className="App">
-      <Button onClick={() => console.log('clicked')} label="Click me" />
+      <Button onClick={() => fetch('http://localhost:5000/get_IPlocation').then(res => res.json()).then(console.log)} label="Get IP Location" />
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>

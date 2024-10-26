@@ -10,7 +10,6 @@ console.log("Environment variables loaded.");
 
 const app = express();
 const tomorrowAPIkey = process.env.TOMORROW_API_KEY;
-console.log("Tomorrow API Key:", tomorrowAPIkey); // This should print the API key
 
 app.use(cors());
 run().catch(console.dir);
