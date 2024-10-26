@@ -19,6 +19,18 @@ app.get(['/', '/index'], (req, res) => {
   res.send('Hello from App Engine!');
 });
 
+
+app.get('/get_IPlocation', async (req, res) => {
+  const ipToken = process.env.IPINFO_TOKEN;
+  const ipInfoUrl = `https://ipinfo.io/?token=${ipToken}`;
+  try {
+    const response = await axios.get(ipInfoUrl);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve IP location data" });
+  }
+});
+
 app.get('/get_weather', async (req, res) => {
   const address = req.query.address || 'University of Southern California, CA';
   const latitude = req.query.latitude;
