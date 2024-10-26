@@ -10,7 +10,9 @@ console.log("Environment variables loaded.");
 
 const app = express();
 const tomorrowAPIkey = process.env.TOMORROW_API_KEY;
+const ipToken = process.env.IPINFO_TOKEN;
 
+ 
 app.use(cors());
 run().catch(console.dir);
 
@@ -20,7 +22,6 @@ app.get(['/', '/index'], (req, res) => {
 
 
 app.get('/get_IPlocation', async (req, res) => {
-  const ipToken = process.env.IPINFO_TOKEN;
   const ipInfoUrl = `https://ipinfo.io/?token=${ipToken}`;
   try {
     const response = await axios.get(ipInfoUrl);
