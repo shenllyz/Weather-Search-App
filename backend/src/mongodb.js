@@ -1,6 +1,17 @@
 
 import { MongoClient, ServerApiVersion } from "mongodb";
-const uri = "mongodb+srv://shenllyz:soYm40NfQ5NA5NQS@websearchstorage.gd79h.mongodb.net/?retryWrites=true&w=majority&appName=WebSearchStorage";
+import dotenv from "dotenv";
+
+import path from "path";
+import { fileURLToPath } from "url";
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+const username = process.env.MONGODB_USERNAME;
+const password = process.env.MONGODB_PASSWORD;
+ 
+//const uri = "mongodb+srv://shenllyz:soYm40NfQ5NA5NQS@websearchstorage.gd79h.mongodb.net/?retryWrites=true&w=majority&appName=WebSearchStorage";
+const uri = `mongodb+srv://${username}:${password}@websearchstorage.gd79h.mongodb.net/?retryWrites=true&w=majority&appName=WebSearchStorage`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
