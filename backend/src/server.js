@@ -15,7 +15,7 @@ console.log("Environment variables loaded.");
 const app = express();
 const tomorrowAPIkey = process.env.TOMORROW_API_KEY;
 const ipToken = process.env.IPINFO_TOKEN;
-
+const geocoding_key = process.env.GOOGLE_GEOCODING_API_KEY;
  
 app.use(cors());
 run().catch(console.dir);
@@ -34,6 +34,17 @@ app.get('/get_IPlocation', async (req, res) => {
     res.status(500).json({ error: "Failed to retrieve IP location data" });
   }
 });
+
+app.get('/get_geocoding', async (req, res) => {
+ const address = req.query.address;
+ const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${geocoding_key}`;
+  try {
+    const response = await axios.get(geocodingUrl);
+    res.json(response.data);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve geocoding data" });
+  }
+})
 
 app.get('/get_weather', async (req, res) => {
   const address = req.query.address || 'University of Southern California, CA';
