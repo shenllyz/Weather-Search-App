@@ -1,5 +1,5 @@
 
-import { MongoClient, ServerApiVersion } from "mongodb";
+import { MongoClient, ServerApiVersion,ObjectId } from "mongodb";
 import dotenv from "dotenv";
 
 import path from "path";
@@ -37,11 +37,11 @@ export async function run() {
   }
 }
  
-export async function insertOne(city, state) {
+export async function insertLocationValue(city, state) {
   try {
     await client.connect();
-    const db = client.db("websearchstorage");
-    const collection = db.collection("Favorites");
+    const db = client.db("Favorites");
+    const collection = db.collection("locations");
     const newValue = { city, state };
     const result = await collection.insertOne(newValue);
     console.log(`Inserted new value: _id: ${result.insertedId}, city: ${city}, state: ${state}`);
@@ -51,11 +51,11 @@ export async function insertOne(city, state) {
 }
 
  
-export async function deleteValue(id) {
+export async function deleteLocationValue(id) {
   try {
     await client.connect();
-    const db = client.db("websearchstorage");
-    const collection = db.collection("Favorites");
+    const db = client.db("Favorites");
+    const collection = db.collection("locations");
     const query = { _id: new ObjectId(id) };
     const doc = await collection.findOne(query);
 
@@ -71,12 +71,11 @@ export async function deleteValue(id) {
   }
 }
 
-export async function getAllValues() {
+export async function getAllLocationValues() {
   try {
     await client.connect();
-    const db = client.db("websearchstorage");
-    const collection = db.collection("Favorites");
-
+    const db = client.db("Favorites");
+    const collection = db.collection("locations");
     const values = await collection.find({}).toArray();
     console.log("Retrieved all values:", values);
     return values;
@@ -84,3 +83,5 @@ export async function getAllValues() {
     await client.close();
   }
 }
+
+ 

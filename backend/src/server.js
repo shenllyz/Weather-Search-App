@@ -2,7 +2,8 @@ import express from "express";
 import cors from "cors";
 import axios from "axios";
 import dotenv from "dotenv";
-import { run } from "./mongodb.js";
+import { run, insertLocationValue, deleteLocationValue, getAllLocationValues } from "./mongodb.js";
+ 
 import path from "path";
 import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
@@ -89,29 +90,31 @@ app.get('/get_weather', async (req, res) => {
   }
 });
 
-app.post('/add_favorite', async (req, res) => {
+app.post('/add_favorite_location', async (req, res) => {
   const { city, state } = req.body;
   try {
-    await insertOne(city, state);
+    await insertLocationValue(city, state);
     res.status(200).json({ message: "Value inserted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to add favorite" });
   }
 });
 
-app.delete('/delete_favorite/:id', async (req, res) => {
+app.delete('/delete_favorite_location/:id', async (req, res) => {
   const { id } = req.params;
+  
   try {
-    await deleteValue(id);
+    await deleteLocationValue(id);
     res.status(200).json({ message: "Value deleted successfully" });
   } catch (error) {
+    console.log(error);
     res.status(500).json({ error: "Failed to delete favorite" });
   }
 });
 
-app.get('/get_favorites', async (req, res) => {
+app.get('/get_all_favorites_locations', async (req, res) => {
   try {
-    const values = await getAllValues();
+    const values = await getAllLocationValues();
     res.status(200).json(values);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve favorites" });
