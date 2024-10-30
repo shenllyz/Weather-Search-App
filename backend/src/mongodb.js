@@ -10,7 +10,6 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 const username = process.env.MONGODB_USERNAME;
 const password = process.env.MONGODB_PASSWORD;
  
-//const uri = "mongodb+srv://shenllyz:soYm40NfQ5NA5NQS@websearchstorage.gd79h.mongodb.net/?retryWrites=true&w=majority&appName=WebSearchStorage";
 const uri = `mongodb+srv://${username}:${password}@websearchstorage.gd79h.mongodb.net/?retryWrites=true&w=majority&appName=WebSearchStorage`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -37,4 +36,51 @@ export async function run() {
     await client.close();
   }
 }
-// run().catch(console.dir);
+ 
+export async function insertOne(city, state) {
+  try {
+    await client.connect();
+    const db = client.db("websearchstorage");
+    const collection = db.collection("Favorites");
+    const newValue = { city, state };
+    const result = await collection.insertOne(newValue);
+    console.log(`Inserted new value: _id: ${result.insertedId}, city: ${city}, state: ${state}`);
+  } finally {
+    await client.close();
+  }
+}
+
+ 
+export async function deleteValue(id) {
+  try {
+    await client.connect();
+    const db = client.db("websearchstorage");
+    const collection = db.collection("Favorites");
+    const query = { _id: new ObjectId(id) };
+    const doc = await collection.findOne(query);
+
+    if (doc) {
+      await collection.deleteOne(query);
+      console.log(`Deleted value: _id: ${doc._id}, city: ${doc.city}, state: ${doc.state}`);
+    } else {
+      console.log(`No document found with _id: ${id}`);
+    }
+
+  } finally {
+    await client.close();
+  }
+}
+
+export async function getAllValues() {
+  try {
+    await client.connect();
+    const db = client.db("websearchstorage");
+    const collection = db.collection("Favorites");
+
+    const values = await collection.find({}).toArray();
+    console.log("Retrieved all values:", values);
+    return values;
+  } finally {
+    await client.close();
+  }
+}

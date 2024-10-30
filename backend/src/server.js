@@ -13,11 +13,13 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 console.log("Environment variables loaded.");
 
 const app = express();
+app.use(cors());
+app.use(express.json());
 const tomorrowAPIkey = process.env.TOMORROW_API_KEY;
 const ipToken = process.env.IPINFO_TOKEN;
 const geocoding_key = process.env.GOOGLE_GEOCODING_API_KEY;
  
-app.use(cors());
+ 
 run().catch(console.dir);
 
 app.get(['/', '/index'], (req, res) => {
@@ -84,6 +86,35 @@ app.get('/get_weather', async (req, res) => {
     res.json(response.data);
   } catch (error) {
     res.status(500).json({ error: "Failed to retrieve weather data" });
+  }
+});
+
+app.post('/add_favorite', async (req, res) => {
+  const { city, state } = req.body;
+  try {
+    await insertOne(city, state);
+    res.status(200).json({ message: "Value inserted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to add favorite" });
+  }
+});
+
+app.delete('/delete_favorite/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await deleteValue(id);
+    res.status(200).json({ message: "Value deleted successfully" });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to delete favorite" });
+  }
+});
+
+app.get('/get_favorites', async (req, res) => {
+  try {
+    const values = await getAllValues();
+    res.status(200).json(values);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to retrieve favorites" });
   }
 });
 
