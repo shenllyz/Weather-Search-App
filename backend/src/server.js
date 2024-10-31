@@ -28,13 +28,11 @@ app.get(['/', '/index'], (req, res) => {
 });
 
 
-app.get('/get_IPlocation', async (req, res) => {
-  const ipInfoUrl = `https://ipinfo.io/?token=${ipToken}`;
+app.get('/get_IPlocation', (req, res) => {
   try {
-    const response = await axios.get(ipInfoUrl);
-    res.json(response.data);
+    res.json({ token: ipToken });
   } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve IP location data" });
+    res.status(500).json({ error: "Failed to retrieve IP token" });
   }
 });
 
@@ -91,9 +89,9 @@ app.get('/get_weather', async (req, res) => {
 });
 
 app.post('/add_favorite_location', async (req, res) => {
-  const { city, state } = req.body;
+  const { city, state, lat, lng } = req.body;
   try {
-    await insertLocationValue(city, state);
+    await insertLocationValue(city, state, lat, lng);
     res.status(200).json({ message: "Value inserted successfully" });
   } catch (error) {
     res.status(500).json({ error: "Failed to add favorite" });
@@ -117,6 +115,7 @@ app.get('/get_all_favorites_locations', async (req, res) => {
     const values = await getAllLocationValues();
     res.status(200).json(values);
   } catch (error) {
+    console.error("Error retrieving favorites:", error);
     res.status(500).json({ error: "Failed to retrieve favorites" });
   }
 });

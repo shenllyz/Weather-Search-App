@@ -1,2 +1,1 @@
-
-app.use(express.json());
+get_all_favorites_locations

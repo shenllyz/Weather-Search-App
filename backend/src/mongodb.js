@@ -1,5 +1,5 @@
 
-import { MongoClient, ServerApiVersion,ObjectId } from "mongodb";
+import { MongoClient, ObjectId, ServerApiVersion } from "mongodb";
 import dotenv from "dotenv";
 
 import path from "path";
@@ -31,20 +31,21 @@ export async function run() {
     await client.db("admin").command({ ping: 1 });
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log(`Databases: ${username}`);
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
   }
 }
  
-export async function insertLocationValue(city, state) {
+export async function insertLocationValue(city, state, lat, lng) {
   try {
     await client.connect();
     const db = client.db("Favorites");
     const collection = db.collection("locations");
-    const newValue = { city, state };
+    const newValue = { city, state, lat, lng };
     const result = await collection.insertOne(newValue);
-    console.log(`Inserted new value: _id: ${result.insertedId}, city: ${city}, state: ${state}`);
+    console.log(`Inserted new value: _id: ${result.insertedId}, city: ${city}, state: ${state}, lat: ${lat}, lng: ${lng}`);
   } finally {
     await client.close();
   }
@@ -79,6 +80,8 @@ export async function getAllLocationValues() {
     const values = await collection.find({}).toArray();
     console.log("Retrieved all values:", values);
     return values;
+  } catch (error) {
+    console.error("Error retrieving favorites:", error); 
   } finally {
     await client.close();
   }
