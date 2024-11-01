@@ -1,1 +1,0 @@
-get_all_favorites_locations

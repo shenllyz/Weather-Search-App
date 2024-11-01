@@ -6,6 +6,7 @@ import { run, insertLocationValue, deleteLocationValue, getAllLocationValues } f
  
 import path from "path";
 import { fileURLToPath } from "url";
+import { type } from "os";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
  
@@ -18,7 +19,7 @@ app.use(cors());
 app.use(express.json());
 const tomorrowAPIkey = process.env.TOMORROW_API_KEY;
 const ipToken = process.env.IPINFO_TOKEN;
-const geocoding_key = process.env.GOOGLE_GEOCODING_API_KEY;
+const googleMapsAPIkey = process.env.GOOGLE_MAPS_API_KEY;
  
  
 run().catch(console.dir);
@@ -36,9 +37,47 @@ app.get('/get_IPlocation', (req, res) => {
   }
 });
 
+app.get('/autocomplete', async (req, res) => {
+  const userInput = req.query.input;
+  
+  if (!userInput) {
+    return res.status(400).json({ error: "Missing 'input' query parameter" });
+  }
+
+  const autocompleteUrl = 'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+  const params = {
+    input: userInput,
+    key: googleMapsAPIkey,
+    types: '(cities)',
+    components: 'country:us',
+  };
+
+  try {
+    const response = await axios.get(autocompleteUrl, { params });
+    const predictions = response.data.predictions;
+    
+    const cityStatePairs = predictions.map(prediction => {
+      const terms = prediction.terms;
+      if (terms.length >= 2) {
+        const city = terms[0].value;
+        const state = terms[1].value;
+        return { city, state };
+      }
+      return null;
+    }).filter(pair => pair !== null);
+
+    res.json(cityStatePairs);
+  } catch (error) {
+    console.error("Error fetching autocomplete data:", error);
+    res.status(500).json({ error: "Failed to retrieve autocomplete data" });
+  }
+});
+
+
+
 app.get('/get_geocoding', async (req, res) => {
  const address = req.query.address;
- const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${geocoding_key}`;
+ const geocodingUrl = `https://maps.googleapis.com/maps/api/geocode/json?address=${address}&key=${googleMapsAPIkey}`;
   try {
     const response = await axios.get(geocodingUrl);
     res.json(response.data);
