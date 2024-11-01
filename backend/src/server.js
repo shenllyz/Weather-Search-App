@@ -6,7 +6,7 @@ import { run, insertLocationValue, deleteLocationValue, getAllLocationValues } f
  
 import path from "path";
 import { fileURLToPath } from "url";
-import { type } from "os";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
  
@@ -25,7 +25,7 @@ const googleMapsAPIkey = process.env.GOOGLE_MAPS_API_KEY;
 run().catch(console.dir);
 
 app.get(['/', '/index'], (req, res) => {
-  res.send('Hello from App Engine!');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 

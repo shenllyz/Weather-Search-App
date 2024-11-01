@@ -54,7 +54,7 @@
       }
   
       try {
-        const response = await fetch(`http://localhost:8001/autocomplete?input=${encodeURIComponent(inputValue)}`);
+        const response = await fetch(`/autocomplete?input=${encodeURIComponent(inputValue)}`);
         if (response.ok) {
           const results = await response.json();
   
