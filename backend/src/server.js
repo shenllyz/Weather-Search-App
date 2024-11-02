@@ -25,7 +25,7 @@ const googleMapsAPIkey = process.env.GOOGLE_MAPS_API_KEY;
 run().catch(console.dir);
 
 app.get(['/', '/index'], (req, res) => {
-  res.sendFile(path.join(__dirname, 'index.html'));
+  res.send('Hello from App Engine!');
 });
 
 
