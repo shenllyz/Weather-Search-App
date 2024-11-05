@@ -1,10 +1,11 @@
-import './App.css';
-import Button from './components/Button';
+// App.tsx
+import './App.scss';
+import SearchForm from './components/SearchForm';
 
 function App() {
   return (
     <div className="App">
-      <Button onClick={() => fetch('http://localhost:8001/get_IPlocation').then(res => res.json()).then(console.log)} label="Get IP Location" />
+      <SearchForm />
     </div>
   );
 }
