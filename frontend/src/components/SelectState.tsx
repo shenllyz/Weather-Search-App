@@ -1,31 +1,47 @@
-import React, { useState } from 'react';
-import { Form } from 'react-bootstrap';
+import { TextField, Autocomplete } from '@mui/material';
 import { states } from '../utils/stateOptions';
+import { useState } from 'react';
 
 interface SelectStateProps {
   onStateChange: (state: string) => void;
 }
 
 const SelectState: React.FC<SelectStateProps> = ({ onStateChange }) => {
-  const [selectedState, setSelectedState] = useState('');
+  const [selectedState, setSelectedState] = useState<string>('');
 
-  const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newState = event.target.value;
-    setSelectedState(newState);
-    onStateChange(newState);
+  const handleChange = (event: React.SyntheticEvent, newState: string | null) => {
+    setSelectedState(newState || '');
+    if (newState) {
+      onStateChange(newState);
+    } else {
+      onStateChange('');
+    }
   };
 
   return (
-    <Form.Group controlId="state">
-      <Form.Select value={selectedState} onChange={handleChange} required>
-        <option value="">Select your state</option>
-        {states.map((state) => (
-          <option key={state.value} value={state.value}>
-            {state.name}
-          </option>
-        ))}
-      </Form.Select>
-    </Form.Group>
+    <Autocomplete
+      value={selectedState}
+      onChange={handleChange}
+      options={states.map((state) => state.name)}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          placeholder="Select or type your state"
+          variant="outlined"
+          required
+          InputLabelProps={{ shrink: false }}
+          sx={{ backgroundColor: 'white', borderRadius: 2 }}
+          InputProps={{
+            ...params.InputProps,
+            style: {
+              padding: '5px',   
+            }
+          }}
+        />
+      )}
+      disableClearable
+      freeSolo
+    />
   );
 };
 

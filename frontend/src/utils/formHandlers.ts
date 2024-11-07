@@ -17,9 +17,8 @@ export const fetchIpInfo = async () => {
     const latitude = loc[0];
     const longitude = loc[1];
     const formattedAddress = `${data.city}, ${data.region}, ${data.country}`;
-    console.log('IP Info:', data);
-     
-    await fetchWeatherData(latitude, longitude, formattedAddress);
+    console.log({ latitude, longitude, formattedAddress });
+    return { latitude, longitude, formattedAddress };
     } catch (error) {
     console.error(error);
   }
@@ -36,16 +35,15 @@ export const fetchIpInfo = async () => {
       const latitude = location.lat;
       const longitude = location.lng;
       const formattedAddress = data.results[0].formatted_address;
-    
-      await fetchWeatherData(latitude, longitude, formattedAddress);
-      console.log('Geocoding Data:', data);
+      console.log({ latitude, longitude, formattedAddress });
+      return { latitude, longitude, formattedAddress };
     } else {
       // Display error info
       console.error('Geocoding API error:', data.status);
     }
   };
   
-  export const fetchWeatherData = async (lat: number, lon: number, address: string) => {
+  export const fetchWeatherData = async (lat: number, lon: number) => {
     try {
       const weatherUrl = `https://csci571asgm3backend.wl.r.appspot.com/get_weather?latitude=${lat}&longitude=${lon}`;
       const response = await fetch(weatherUrl);
@@ -54,8 +52,8 @@ export const fetchIpInfo = async () => {
       }
       const data = await response.json();
       if (data.data) {
-        console.log('Weather Data:', data);
-        // Update weather card and table
+        console.log(data);
+        return data;
       } else {
         console.error('Weather API error:', data.error);
       }
