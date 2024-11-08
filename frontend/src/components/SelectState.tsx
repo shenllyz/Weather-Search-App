@@ -1,26 +1,20 @@
 import { TextField, Autocomplete } from '@mui/material';
 import { states } from '../utils/stateOptions';
-import { useState } from 'react';
 
 interface SelectStateProps {
+  value: string;
   onStateChange: (state: string) => void;
+  disabled: boolean;
 }
 
-const SelectState: React.FC<SelectStateProps> = ({ onStateChange }) => {
-  const [selectedState, setSelectedState] = useState<string>('');
-
+const SelectState: React.FC<SelectStateProps> = ({ value, onStateChange, disabled }) => {
   const handleChange = (event: React.SyntheticEvent, newState: string | null) => {
-    setSelectedState(newState || '');
-    if (newState) {
-      onStateChange(newState);
-    } else {
-      onStateChange('');
-    }
+    onStateChange(newState || '');
   };
 
   return (
     <Autocomplete
-      value={selectedState}
+      value={value}
       onChange={handleChange}
       options={states.map((state) => state.name)}
       renderInput={(params) => (
@@ -30,15 +24,24 @@ const SelectState: React.FC<SelectStateProps> = ({ onStateChange }) => {
           variant="outlined"
           required
           InputLabelProps={{ shrink: false }}
-          sx={{ backgroundColor: 'white', borderRadius: 2 }}
+          sx={{  
+            '& .MuiOutlinedInput-root.Mui-disabled': {
+              '& fieldset': {
+                borderColor: '#d3d3d3',  
+              },
+              borderRadius: 2,
+            },
+          }}
           InputProps={{
             ...params.InputProps,
             style: {
-              padding: '5px',   
-            }
+              backgroundColor: disabled ? '#f0f0f0' : 'white', 
+              padding: '10px',
+            },
           }}
         />
       )}
+      disabled={disabled}
       disableClearable
       freeSolo
     />

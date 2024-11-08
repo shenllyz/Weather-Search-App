@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import SelectState from './SelectState';
 import SearchButton from './SearchButton';
-import Button from 'react-bootstrap/Button';
+import ClearButton from './ClearButton';
+import StreetInput from './StreetInput';
+import CityInput from './CityInput';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -17,10 +19,21 @@ const SearchForm: React.FC = () => {
   const [state, setState] = useState('');
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
-
+  const [inputsDisabled, setInputsDisabled] = useState(false);
+  
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUseCurrentLocation(e.target.checked);
-    setIsFormValid(e.target.checked || (street !== '' && city !== '' && state !== ''));
+    const isChecked = e.target.checked;
+    setUseCurrentLocation(isChecked);
+    setInputsDisabled(isChecked);
+
+    if (isChecked) {
+      setStreet('');
+      setCity('');
+      setState('');
+      setIsFormValid(true);
+    } else {
+      setIsFormValid(street !== '' && city !== '' && state !== '');
+    }
   };
 
   const handleInputChange = () => {
@@ -36,6 +49,14 @@ const SearchForm: React.FC = () => {
     }
   };
 
+  const handleClear = () => {
+    setUseCurrentLocation(false);
+    setStreet('');
+    setCity('');
+    setState('');
+    setIsFormValid(false);
+    setInputsDisabled(false);
+  };
   return (
     <Container className="customContainer p-4 rounded shadow-lg text-center mt-3">
       <h3 className="header text-center mb-4">Weather Search ⛅</h3>
@@ -43,58 +64,54 @@ const SearchForm: React.FC = () => {
         <Form.Group as={Row} className="align-items-center mb-0">
           <Col md={1}></Col>
           <Col xs={12} md={2} className="text-start">
-            <Form.Label htmlFor="street" className="mt-0 mb-0">
+            <Form.Label htmlFor="street" className="mt-0 mb-0 fs-5">
               Street<span style={{ color: 'red' }}>*</span>
             </Form.Label>
           </Col>
-          <Col xs={12} md={6}>
-            <Form.Control
-              type="text"
-              id="street"
-              name="street"
-              value={street}
-              onChange={(e) => {
-                setStreet(e.target.value);
-                handleInputChange();
-              }}
-              required
-            />
+          <Col xs={12} md={8}>
+          <StreetInput
+            value={street}
+            onChange={(newValue) => {
+              setStreet(newValue);
+              handleInputChange();
+            }}
+            disabled={inputsDisabled}
+          />
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="align-items-center mb-0">
           <Col md={1}></Col>
           <Col xs={12} md={2} className="text-start">
-            <Form.Label htmlFor="city" className="mt-0 mb-0">
+            <Form.Label htmlFor="city" className="mt-0 mb-0 fs-5">
               City<span style={{ color: 'red' }}>*</span>
             </Form.Label>
           </Col>
-          <Col xs={12} md={6}>
-            <Form.Control
-              type="text"
-              id="city"
-              name="city"
-              value={city}
-              onChange={(e) => {
-                setCity(e.target.value);
-                handleInputChange();
-              }}
-              required
-            />
+          <Col xs={12} md={8}>
+              <CityInput
+                value={city}
+                onChange={(value) => {
+                  setCity(value);
+                  handleInputChange();
+                }}
+                disabled={inputsDisabled}
+              />
           </Col>
         </Form.Group>
         <Form.Group as={Row} className="align-items-center mb-3">
           <Col md={1}></Col>
           <Col xs={12} md={2} className="text-start">
-            <Form.Label htmlFor="state" className="mt-0 mb-0">
+            <Form.Label htmlFor="state" className="mt-0 mb-0 fs-5">
               State<span style={{ color: 'red' }}>*</span>
             </Form.Label>
           </Col>
-          <Col xs={12} md={3}>
+          <Col xs={12} md={4}>
             <SelectState 
+              value={state}
                onStateChange={(newState) => {
                 setState(newState);
                 handleInputChange();
               }}
+              disabled={inputsDisabled}
             />
           </Col>
            
@@ -125,9 +142,7 @@ const SearchForm: React.FC = () => {
         <Row className="text-center mt-4">
           <Col>
             <SearchButton onSubmit={handleSubmit} disabled={!isFormValid}/>
-            <Button variant="outline-secondary" className="p-2" size="lg">
-              <i className="bi bi-list-nested fst-normal fs-5 m-2">Clear</i>
-            </Button>
+            <ClearButton onClear={handleClear} />
           </Col>
         </Row>
       </form>
