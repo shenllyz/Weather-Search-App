@@ -21,6 +21,7 @@ const SearchForm: React.FC = () => {
   const [inputsDisabled, setInputsDisabled] = useState(false);
   const [errors, setErrors] = useState<{ street?: string; city?: string; state?: string}>({});
   const [touchedFields, setTouchedFields] = useState<{ street?: boolean; city?: boolean ,state?:boolean}>({});
+  const [geocodingError, setGeocodingError] = useState(false);
 
   useEffect(() => {
     if (useCurrentLocation) {
@@ -93,10 +94,29 @@ const SearchForm: React.FC = () => {
     setInputsDisabled(false);
     setErrors({});
     setTouchedFields({});
+    setGeocodingError(false);
+  };
+  interface GeocodingResponse {
+    status: string;
+    // 你可以根据实际的API响应添加更多属性
+  }
+  const handleGeocodingResponse = (response:  GeocodingResponse) => {
+    if (response.status === 'ZERO_RESULTS') {
+      setGeocodingError(true);
+    } else {
+      setGeocodingError(false);
+    }
   };
 
   return (
     <Container className="customContainer p-4 rounded shadow-lg text-center mt-3">
+        {geocodingError && (
+        <Row className="bg-danger text-white">
+          <Col xs={8} className="text-start">
+            An error occurred, please try later.
+          </Col>
+        </Row>
+      )}
       <h3 className="header text-center mb-4">Weather Search ⛅</h3>
       <form>
         <Form.Group as={Row} className="align-items-center mb-0">
