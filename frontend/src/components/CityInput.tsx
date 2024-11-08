@@ -3,8 +3,10 @@ import { TextField, Autocomplete } from '@mui/material';
 
 interface CityInputProps {
   value: string;
-  onChange: (value: string) => void;
+  onCityChange: (value: string) => void;
+  onBlur?: () => void;
   disabled: boolean;
+  error: boolean;
 }
 
 interface CityState {
@@ -12,7 +14,7 @@ interface CityState {
   state: string;
 }
 
-const CityInput: React.FC<CityInputProps> = ({ value, onChange, disabled }) => {
+const CityInput: React.FC<CityInputProps> = ({ value, onCityChange, onBlur, disabled, error }) => {
   const [options, setOptions] = useState<string[]>([]);
 
   const fetchOptions = async (inputValue: string) => {
@@ -21,34 +23,32 @@ const CityInput: React.FC<CityInputProps> = ({ value, onChange, disabled }) => {
       return;
     }
     try {
-      const response = await fetch(`https://csci571asgm3backend.wl.r.appspot.com/autocomplete?input=${inputValue}`);
+      const response = await fetch(
+        `https://csci571asgm3backend.wl.r.appspot.com/autocomplete?input=${inputValue}`
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch autocomplete options');
       }
       const data: CityState[] = await response.json();
-      const cityNames = data.map(item => item.city); // Extract city names from the response
-      const uniqueCityNames = Array.from(new Set(cityNames)); // Ensure unique city names
+      const cityNames = data.map((item) => item.city);
+      const uniqueCityNames = Array.from(new Set(cityNames));
       setOptions(uniqueCityNames);
     } catch (error) {
       console.error('Error fetching autocomplete options:', error);
     }
   };
 
-  const handleInputChange = (event: React.ChangeEvent<{}>, newInputValue: string) => {
-    onChange(newInputValue);
+  const handleInputChange = (event: React.SyntheticEvent, newInputValue: string) => {
+    onCityChange(newInputValue);
     fetchOptions(newInputValue);
-  };
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string | null) => {
-    onChange(newValue || '');
   };
 
   return (
     <Autocomplete
       value={value}
-      onChange={handleChange}
       inputValue={value}
       onInputChange={handleInputChange}
+      onBlur={onBlur}
       options={options}
       renderInput={(params) => (
         <TextField
@@ -59,6 +59,11 @@ const CityInput: React.FC<CityInputProps> = ({ value, onChange, disabled }) => {
             '& .MuiOutlinedInput-root.Mui-disabled': {
               '& fieldset': {
                 borderColor: '#d3d3d3',
+              },
+            },
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: error ? 'red' : 'rgba(0, 0, 0, 0.23)',
               },
             },
             borderRadius: 2,
