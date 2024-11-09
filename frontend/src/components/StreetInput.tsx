@@ -3,18 +3,26 @@ import TextField from '@mui/material/TextField';
 
 interface StreetInputProps {
   value: string;
-  onChange: (value: string) => void;
+  onStreetChange: (value: string) => void;
   onBlur?: () => void;
+  onChange?: () => void;
   disabled: boolean;
   error: boolean;
 }
 
-const StreetInput: React.FC<StreetInputProps> = ({ value, onChange,  onBlur, disabled, error }) => {
+const StreetInput: React.FC<StreetInputProps> = ({ value, onStreetChange,  onBlur, onChange, disabled, error }) => {
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        onStreetChange(event.target.value);
+        if (onChange) {
+          onChange();
+        }
+      };
+  
   return (
     <TextField
       variant="outlined"
       value={value}
-      onChange={(e) => onChange(e.target.value)}
+      onChange={handleChange}
       onBlur={onBlur} 
       fullWidth
       sx={{

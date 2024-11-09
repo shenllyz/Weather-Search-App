@@ -5,19 +5,26 @@ interface SelectStateProps {
   value: string;
   onStateChange: (state: string) => void;
   onBlur?: () => void;
+  onChange?: () => void;
   disabled: boolean;
   error: boolean;
 }
 
-const SelectState: React.FC<SelectStateProps> = ({ value, onStateChange, onBlur, disabled, error }) => {
+const SelectState: React.FC<SelectStateProps> = ({ value, onStateChange, onBlur, onChange, disabled, error }) => {
+  
+  const handleInputChange = (event: React.SyntheticEvent, newInputValue: string) => {
+    onStateChange(newInputValue);
+    if (onChange) {
+      onChange();
+    }
+  };
+
   return (
     <Autocomplete
       freeSolo
       options={states.map((state) => state.name)}
       inputValue={value}
-      onInputChange={(event, newInputValue) => {
-        onStateChange(newInputValue);
-      }}
+      onInputChange={handleInputChange}
       onBlur={onBlur}
       disabled={disabled}
       renderInput={(params) => (

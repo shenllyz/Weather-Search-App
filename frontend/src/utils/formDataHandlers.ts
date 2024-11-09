@@ -1,9 +1,9 @@
 export const fetchIpInfo = async () => {
-    try {
+  try {
     const ipTokenResponse = await fetch('https://csci571asgm3backend.wl.r.appspot.com/get_IPlocation');
     if (!ipTokenResponse.ok) {
-        throw new Error(`Error fetching IP token: ${ipTokenResponse.status}`);
-      }
+      throw new Error(`Error fetching IP token: ${ipTokenResponse.status}`);
+    }
     const ipTokenData = await ipTokenResponse.json();
     const ipToken = ipTokenData.token;
     const ipInfoUrl = `https://ipinfo.io/?token=${ipToken}`;
@@ -19,12 +19,17 @@ export const fetchIpInfo = async () => {
     const formattedAddress = `${data.city}, ${data.region}, ${data.country}`;
     console.log({ latitude, longitude, formattedAddress });
     return { latitude, longitude, formattedAddress };
-    } catch (error) {
+  } catch (error) {
     console.error(error);
+    throw error;  
   }
-  };
+};
 
-  export const fetchGeocodingData = async (address: string) => {
+
+ 
+
+export const fetchGeocodingData = async (address: string) => {
+  try {
     const response = await fetch(`https://csci571asgm3backend.wl.r.appspot.com/get_geocoding?address=${address}`);
     if (!response.ok) {
       throw new Error(`Error fetching Geocoding data: ${response.status}`);
@@ -38,10 +43,15 @@ export const fetchIpInfo = async () => {
       console.log({ latitude, longitude, formattedAddress });
       return { latitude, longitude, formattedAddress };
     } else {
-      // Display error info
-      console.error('Geocoding API error:', data.status);
+       
+      throw new Error(`Geocoding API error: ${data.status}`);
     }
-  };
+  } catch (error) {
+    console.error(error);
+    throw error;  
+  }
+};
+
   
   export const fetchWeatherData = async (lat: number, lon: number) => {
     try {
@@ -56,8 +66,10 @@ export const fetchIpInfo = async () => {
         return data;
       } else {
         console.error('Weather API error:', data.error);
+        throw new Error('Weather API error');
       }
     } catch (error) {
       console.error(error);
+      throw error; 
     }
   };
