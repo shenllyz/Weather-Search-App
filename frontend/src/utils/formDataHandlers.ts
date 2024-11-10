@@ -16,9 +16,11 @@ export const fetchIpInfo = async () => {
     const loc = data.loc.split(',');
     const latitude = loc[0];
     const longitude = loc[1];
-    const formattedAddress = `${data.city}, ${data.region}, ${data.country}`;
-    console.log({ latitude, longitude, formattedAddress });
-    return { latitude, longitude, formattedAddress };
+    const city = data.city;
+    const state = data.region;
+    
+    console.log({ latitude, longitude, city, state});
+    return { latitude, longitude, city, state};
   } catch (error) {
     console.error(error);
     throw error;  
@@ -39,6 +41,7 @@ export const fetchGeocodingData = async (address: string) => {
       const location = data.results[0].geometry.location;
       const latitude = location.lat;
       const longitude = location.lng;
+      console.log(data);
       const formattedAddress = data.results[0].formatted_address;
       console.log({ latitude, longitude, formattedAddress });
       return { latitude, longitude, formattedAddress };

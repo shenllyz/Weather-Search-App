@@ -4,30 +4,42 @@ import SearchButton from './SearchButton';
 import ClearButton from './ClearButton';
 import StreetInput from './StreetInput';
 import CityInput from './CityInput';
-import ErrorAlert from './ErrorAlert';
-import MenuButtons from './MenuButtons';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import ProgressBar from 'react-bootstrap/ProgressBar';
 import '../styles/customCheckbox.scss';
 import '../styles/customContainer.scss';
 import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../utils/formDataHandlers';
 import { states } from '../utils/stateOptions';
 
-const SearchForm: React.FC = () => {
+interface SearchFormProps {
+  setCity: (city: string) => void;
+  setState: (state: string) => void;
+  onSearch: (city: string, state: string) => void;
+  onClear: () => void;
+  setShowProgressBar: (show: boolean) => void;
+  setProgress: (progress: number) => void;
+  setApiError: (error: boolean) => void;
+}
+
+const SearchForm: React.FC<SearchFormProps> = ({
+  setCity,
+  setState,
+  onSearch,
+  onClear,
+  setShowProgressBar,
+  setProgress,
+  setApiError,
+}) => {
   const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
+  const [cityInput, setCityInput] = useState('');
+  const [stateInput, setStateInput] = useState('');
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [inputsDisabled, setInputsDisabled] = useState(false);
   const [errors, setErrors] = useState<{ street?: string; city?: string; state?: string }>({});
   const [touchedFields, setTouchedFields] = useState<{ street?: boolean; city?: boolean; state?: boolean }>({});
-  const [apiError, setApiError] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [showProgressBar, setShowProgressBar] = useState(false);
 
   useEffect(() => {
     if (useCurrentLocation) {
@@ -38,11 +50,11 @@ const SearchForm: React.FC = () => {
         !errors.city &&
         !errors.state &&
         street.trim() !== '' &&
-        city.trim() !== '' &&
-        state.trim() !== '';
+        cityInput.trim() !== '' &&
+        stateInput.trim() !== '';
       setIsFormValid(isValid);
     }
-  }, [errors, street, city, state, useCurrentLocation]);
+  }, [errors, street, cityInput, stateInput, useCurrentLocation]);
 
   const handleCheckboxChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const isChecked = e.target.checked;
@@ -51,8 +63,8 @@ const SearchForm: React.FC = () => {
 
     if (isChecked) {
       setStreet('');
-      setCity('');
-      setState('');
+      setCityInput('');
+      setStateInput('');
       setErrors({});
       setTouchedFields({});
       setIsFormValid(true);
@@ -77,22 +89,26 @@ const SearchForm: React.FC = () => {
   };
 
   const handleCitySelect = (selectedCityState: { city: string; state: string }) => {
-    setCity(selectedCityState.city);
+    setCityInput(selectedCityState.city);
     const selectedState = states.find((stateObj) => stateObj.value === selectedCityState.state);
     if (selectedState) {
-      setState(selectedState.name);
+      setStateInput(selectedState.name);
     }
   };
 
   const handleSubmit = async () => {
     let latitude: number;
     let longitude: number;
+    let city: string;
+    let state: string;
     setApiError(false);
     if (useCurrentLocation) {
       try {
         const ipinfo = await fetchIpInfo();
         latitude = parseFloat(ipinfo.latitude);
         longitude = parseFloat(ipinfo.longitude);
+        city = ipinfo.city;
+        state = ipinfo.state;
       } catch (error) {
         console.error('Error fetching IP info:', error);
         setApiError(true);
@@ -107,12 +123,14 @@ const SearchForm: React.FC = () => {
         setShowProgressBar(false);
         return;
       }
-  
-      const address = encodeURIComponent(`${street}, ${city}, ${state}`);
-      try { 
+
+      const address = encodeURIComponent(`${street}, ${cityInput}, ${stateInput}`);
+      try {
         const geocodingResult = await fetchGeocodingData(address);
         latitude = geocodingResult.latitude;
         longitude = geocodingResult.longitude;
+        city = cityInput;
+        state = stateInput;
       } catch (error) {
         console.error('Error fetching geocoding data:', error);
         setApiError(true);
@@ -122,28 +140,29 @@ const SearchForm: React.FC = () => {
         setShowProgressBar(false);
       }
     }
-  
+
     try {
       setShowProgressBar(true);
       setProgress(50);
       const weatherData = await fetchWeatherData(latitude, longitude);
-      setProgress(80);
-      await new Promise(resolve => setTimeout(resolve, 100));
       setProgress(100);
+      await new Promise((resolve) => setTimeout(resolve, 300));
+      setCity(city);
+      setState(state);
+      onSearch(city, state);
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setApiError(true);
     } finally {
       setShowProgressBar(false);
     }
-  
   };
 
   const handleClear = () => {
     setUseCurrentLocation(false);
     setStreet('');
-    setCity('');
-    setState('');
+    setCityInput('');
+    setStateInput('');
     setIsFormValid(false);
     setInputsDisabled(false);
     setApiError(false);
@@ -151,6 +170,7 @@ const SearchForm: React.FC = () => {
     setTouchedFields({});
     setShowProgressBar(false);
     setProgress(0);
+    onClear();
   };
 
   return (
@@ -194,15 +214,15 @@ const SearchForm: React.FC = () => {
             <Col xs={12} md={8}>
               <CityInput
                 error={!!errors.city}
-                value={city}
+                value={cityInput}
                 onCityChange={(value) => {
-                  setCity(value);
+                  setCityInput(value);
                   validateField('city', value);
                 }}
                 onCitySelect={handleCitySelect}
                 onBlur={() => {
                   setTouchedFields((prev) => ({ ...prev, city: true }));
-                  validateField('city', city);
+                  validateField('city', cityInput);
                 }}
                 disabled={inputsDisabled}
               />
@@ -220,14 +240,14 @@ const SearchForm: React.FC = () => {
             </Col>
             <Col xs={12} md={4}>
               <SelectState
-                value={state}
+                value={stateInput}
                 onStateChange={(newState) => {
-                  setState(newState);
+                  setStateInput(newState);
                   validateField('state', newState);
                 }}
                 onBlur={() => {
                   setTouchedFields((prev) => ({ ...prev, state: true }));
-                  validateField('state', state);
+                  validateField('state', stateInput);
                 }}
                 disabled={inputsDisabled}
                 error={!!errors.state}
@@ -267,17 +287,6 @@ const SearchForm: React.FC = () => {
           </Row>
         </form>
       </Container>
-      <MenuButtons />
-      {showProgressBar && (
-        <Container>
-          <Row className="mt-2">
-            <Col xs={12}>
-              <ProgressBar animated now={progress} />
-            </Col>
-          </Row>
-        </Container>
-      )}
-      {apiError && <ErrorAlert />}
     </section>
   );
 };
