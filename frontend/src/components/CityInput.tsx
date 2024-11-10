@@ -6,7 +6,6 @@ interface CityInputProps {
   onCityChange: (value: string) => void;
   onCitySelect: (cityState: CityState) => void;
   onBlur?: () => void;
-  onChange?: () => void;
   disabled: boolean;
   error: boolean;
 }
@@ -16,7 +15,7 @@ interface CityState {
   state: string;
 }
 
-const CityInput: React.FC<CityInputProps> = ({ value, onCityChange, onCitySelect, onBlur, onChange, disabled, error }) => {
+const CityInput: React.FC<CityInputProps> = ({ value, onCityChange, onCitySelect, onBlur, disabled, error }) => {
   const [options, setOptions] = useState<CityState[]>([]);
 
   const fetchOptions = async (inputValue: string) => {
@@ -41,9 +40,6 @@ const CityInput: React.FC<CityInputProps> = ({ value, onCityChange, onCitySelect
   const handleInputChange = (event: React.SyntheticEvent, newInputValue: string) => {
     onCityChange(newInputValue);
     fetchOptions(newInputValue);
-    if (onChange) {
-      onChange();
-    }
   };
 
   const handleSelect = (event: React.SyntheticEvent, selectedValue: CityState | null) => {

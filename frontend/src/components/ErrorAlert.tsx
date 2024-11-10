@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 
 const ErrorAlert: React.FC = () => {
   return (
-    <Container style={{ backgroundColor: '#FADBD8' }} className="mt-3 p-3 rounded">
+    <Container style={{ backgroundColor: '#FADBD8' }} className="mt-5 p-3 rounded">
       <Row>
         <Col xs={8} className="text-start" style={{ color: 'black' }}>
           An error occurred, please try again later.

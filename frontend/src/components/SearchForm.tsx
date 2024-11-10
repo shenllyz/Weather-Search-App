@@ -10,9 +10,10 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
+import ProgressBar from 'react-bootstrap/ProgressBar';
 import '../styles/customCheckbox.scss';
 import '../styles/customContainer.scss';
-import { fetchIpInfo, fetchGeocodingData } from '../utils/formDataHandlers';
+import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../utils/formDataHandlers';
 import { states } from '../utils/stateOptions';
 
 const SearchForm: React.FC = () => {
@@ -22,9 +23,11 @@ const SearchForm: React.FC = () => {
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
   const [isFormValid, setIsFormValid] = useState(false);
   const [inputsDisabled, setInputsDisabled] = useState(false);
-  const [errors, setErrors] = useState<{ street?: string; city?: string; state?: string}>({});
-  const [touchedFields, setTouchedFields] = useState<{ street?: boolean; city?: boolean ,state?:boolean}>({});
+  const [errors, setErrors] = useState<{ street?: string; city?: string; state?: string }>({});
+  const [touchedFields, setTouchedFields] = useState<{ street?: boolean; city?: boolean; state?: boolean }>({});
   const [apiError, setApiError] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [showProgressBar, setShowProgressBar] = useState(false);
 
   useEffect(() => {
     if (useCurrentLocation) {
@@ -58,7 +61,7 @@ const SearchForm: React.FC = () => {
 
   const validateField = (fieldName: 'street' | 'city' | 'state', value: string) => {
     let errorMessage = '';
-  
+
     if (value.trim() === '') {
       if (fieldName !== 'state') {
         errorMessage = `Please enter a valid ${fieldName}`;
@@ -66,50 +69,74 @@ const SearchForm: React.FC = () => {
         errorMessage = 'Please select a state';
       }
     }
-  
+
     setErrors((prevErrors) => ({
       ...prevErrors,
       [fieldName]: errorMessage,
     }));
   };
 
-
   const handleCitySelect = (selectedCityState: { city: string; state: string }) => {
     setCity(selectedCityState.city);
     const selectedState = states.find((stateObj) => stateObj.value === selectedCityState.state);
     if (selectedState) {
-      setState(selectedState.name); // Set the state input to the state's full name
+      setState(selectedState.name);
     }
   };
 
   const handleSubmit = async () => {
+    let latitude: number;
+    let longitude: number;
+    setApiError(false);
     if (useCurrentLocation) {
       try {
-        await fetchIpInfo();
-        setApiError(false); // Reset API error state if successful
+        const ipinfo = await fetchIpInfo();
+        latitude = parseFloat(ipinfo.latitude);
+        longitude = parseFloat(ipinfo.longitude);
       } catch (error) {
         console.error('Error fetching IP info:', error);
-        setApiError(true); // Set API error state to true
+        setApiError(true);
+        setShowProgressBar(false);
         return;
+      } finally {
+        setShowProgressBar(false);
       }
     } else {
-      // Set all fields as touched
       setTouchedFields({ street: true, city: true, state: true });
       if (!isFormValid) {
+        setShowProgressBar(false);
         return;
       }
   
       const address = encodeURIComponent(`${street}, ${city}, ${state}`);
-      try {
+      try { 
         const geocodingResult = await fetchGeocodingData(address);
-        setApiError(false); // Reset API error state if successful
-        // Proceed with further actions using geocodingResult
+        latitude = geocodingResult.latitude;
+        longitude = geocodingResult.longitude;
       } catch (error) {
         console.error('Error fetching geocoding data:', error);
-        setApiError(true); // Set API error state to true
+        setApiError(true);
+        setShowProgressBar(false);
         return;
+      } finally {
+        setShowProgressBar(false);
       }
     }
+  
+    try {
+      setShowProgressBar(true);
+      setProgress(50);
+      const weatherData = await fetchWeatherData(latitude, longitude);
+      setProgress(80);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      setProgress(100);
+    } catch (error) {
+      console.error('Error fetching weather data:', error);
+      setApiError(true);
+    } finally {
+      setShowProgressBar(false);
+    }
+  
   };
 
   const handleClear = () => {
@@ -122,11 +149,13 @@ const SearchForm: React.FC = () => {
     setApiError(false);
     setErrors({});
     setTouchedFields({});
+    setShowProgressBar(false);
+    setProgress(0);
   };
 
   return (
     <section>
-      <Container className="customContainer p-4 rounded shadow-md text-center mt-3">
+      <Container className="customContainer p-4 rounded shadow-md text-center mt-3 ">
         <h3 className="header text-center mb-4">Weather Search ⛅</h3>
         <form>
           <Form.Group as={Row} className="align-items-center mb-0">
@@ -239,6 +268,15 @@ const SearchForm: React.FC = () => {
         </form>
       </Container>
       <MenuButtons />
+      {showProgressBar && (
+        <Container>
+          <Row className="mt-2">
+            <Col xs={12}>
+              <ProgressBar animated now={progress} />
+            </Col>
+          </Row>
+        </Container>
+      )}
       {apiError && <ErrorAlert />}
     </section>
   );

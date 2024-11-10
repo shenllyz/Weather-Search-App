@@ -5,17 +5,13 @@ interface StreetInputProps {
   value: string;
   onStreetChange: (value: string) => void;
   onBlur?: () => void;
-  onChange?: () => void;
   disabled: boolean;
   error: boolean;
 }
 
-const StreetInput: React.FC<StreetInputProps> = ({ value, onStreetChange,  onBlur, onChange, disabled, error }) => {
+const StreetInput: React.FC<StreetInputProps> = ({ value, onStreetChange,  onBlur, disabled, error }) => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         onStreetChange(event.target.value);
-        if (onChange) {
-          onChange();
-        }
       };
   
   return (

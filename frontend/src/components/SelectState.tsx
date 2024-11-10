@@ -5,18 +5,14 @@ interface SelectStateProps {
   value: string;
   onStateChange: (state: string) => void;
   onBlur?: () => void;
-  onChange?: () => void;
   disabled: boolean;
   error: boolean;
 }
 
-const SelectState: React.FC<SelectStateProps> = ({ value, onStateChange, onBlur, onChange, disabled, error }) => {
+const SelectState: React.FC<SelectStateProps> = ({ value, onStateChange, onBlur, disabled, error }) => {
   
   const handleInputChange = (event: React.SyntheticEvent, newInputValue: string) => {
     onStateChange(newInputValue);
-    if (onChange) {
-      onChange();
-    }
   };
 
   return (
