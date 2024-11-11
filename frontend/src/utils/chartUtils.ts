@@ -25,7 +25,7 @@ export function getTemperatureChartOptions(dailyWeatherData: DailyWeather[]) {
         type: 'x'
       },
       scrollablePlotArea: {
-        minWidth: 600,
+        minWidth: 400,
         scrollPositionX: 1
       },
       width: null,
