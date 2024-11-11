@@ -12,7 +12,6 @@ export function getTemperatureChartOptions(dailyWeatherData: DailyWeather[]) {
   });
 
   function formatDateRange(data: [number, number, number][]) {
-    console.log(data);
     const firstDate = Highcharts.dateFormat('%A, %b %e', data[0][0]);
     const lastDate = Highcharts.dateFormat('%A, %b %e', data[data.length - 1][0]);
     return `${firstDate} - ${lastDate}`;
@@ -25,7 +24,7 @@ export function getTemperatureChartOptions(dailyWeatherData: DailyWeather[]) {
         type: 'x'
       },
       scrollablePlotArea: {
-        minWidth: 400,
+        minWidth: 350,
         scrollPositionX: 1
       },
       width: null,

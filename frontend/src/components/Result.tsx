@@ -6,16 +6,18 @@ import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
 import DailyView from './DailyView';
 import DailyTempChart from './DailyTempChart';
+import MeteogramComponent from './Meteogram';
 import "../styles/customFontstyle.scss";
-import { DailyWeather } from '../utils/weatherUtils';
-
+import { DailyWeather, HourlyWeather } from '../utils/weatherUtils';
+ 
 interface ResultProps {
   city: string;
   state: string;
   dailyWeatherData: DailyWeather[];
+  hourlyWeatherData: HourlyWeather[];
 }
 
-const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData }) => {
+const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWeatherData }) => {
   const [activeTab, setActiveTab] = useState<string>('dailyView');
   
   return (
@@ -34,7 +36,7 @@ const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData }) => {
             onSelect={(v) => setActiveTab(v || 'dailyView')}
           >
             <Tab eventKey="meteogram" title="Meteogram">
-              <div>Meteogram Content</div>
+              {activeTab === 'meteogram' && <MeteogramComponent weatherData={hourlyWeatherData} />} 
             </Tab>
             <Tab eventKey="dailyTempChart" title="Daily Temp. Chart">
             {activeTab === 'dailyTempChart' && <DailyTempChart weatherData={dailyWeatherData} />}

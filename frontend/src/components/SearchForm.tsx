@@ -12,12 +12,12 @@ import '../styles/customCheckbox.scss';
 import '../styles/customContainer.scss';
 import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../utils/formDataHandlers';
 import { states } from '../utils/stateOptions';
-import { parseDailyWeather, parseHourlyWeather, DailyWeather } from '../utils/weatherUtils';
+import { parseDailyWeather, parseHourlyWeather, DailyWeather,HourlyWeather } from '../utils/weatherUtils';
 
 interface SearchFormProps {
   setCity: (city: string) => void;
   setState: (state: string) => void;
-  onSearch: (city: string, state: string, dailyData: DailyWeather[]) => void;
+  onSearch: (city: string, state: string, dailyData: DailyWeather[], hourlyData: HourlyWeather[]) => void;
   onClear: () => void;
   setShowProgressBar: (show: boolean) => void;
   setProgress: (progress: number) => void;
@@ -147,12 +147,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
       setProgress(40);
       const weatherData = await fetchWeatherData(latitude, longitude);
       const dailyData = parseDailyWeather(weatherData);
-      parseHourlyWeather(weatherData);
+      const hourlyData = parseHourlyWeather(weatherData);
+       
       setProgress(100);
       await new Promise((resolve) => setTimeout(resolve, 300));
       setCity(city);
       setState(state);
-      onSearch(city, state, dailyData);
+      onSearch(city, state, dailyData, hourlyData);
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setApiError(true);
