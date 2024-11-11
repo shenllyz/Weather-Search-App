@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -16,6 +16,8 @@ interface ResultProps {
 }
 
 const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData }) => {
+  const [activeTab, setActiveTab] = useState<string>('dailyView');
+  
   return (
     <Container>
       <Row className='text-center mt-5'>
@@ -25,12 +27,17 @@ const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData }) => {
       </Row>
       <Row className='mt-4'>
         <Col>
-          <Tabs defaultActiveKey="dailyView" id="result-tabs" dir='rtl'>
+          <Tabs 
+            defaultActiveKey="dailyView" 
+            id="result-tabs" 
+            dir='rtl'
+            onSelect={(v) => setActiveTab(v || 'dailyView')}
+          >
             <Tab eventKey="meteogram" title="Meteogram">
               <div>Meteogram Content</div>
             </Tab>
             <Tab eventKey="dailyTempChart" title="Daily Temp. Chart">
-              <DailyTempChart weatherData={dailyWeatherData} />
+            {activeTab === 'dailyTempChart' && <DailyTempChart weatherData={dailyWeatherData} />}
             </Tab>
             <Tab eventKey="dailyView" title="Daily View">
               <DailyView weatherData={dailyWeatherData} />

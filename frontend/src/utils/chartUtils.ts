@@ -25,11 +25,11 @@ export function getTemperatureChartOptions(dailyWeatherData: DailyWeather[]) {
         type: 'x'
       },
       scrollablePlotArea: {
-        minWidth: 1100,
+        minWidth: 600,
         scrollPositionX: 1
       },
-      width: 1100,
-      height: 400
+      width: null,
+      height: null
     },
     title: {
       text: 'Temperature Ranges (Min, Max)'

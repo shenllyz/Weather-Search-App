@@ -5,18 +5,18 @@ import HighchartsExporting from 'highcharts/modules/exporting';
 import HighchartsExportData from 'highcharts/modules/export-data';
 import HighchartsAccessibility from 'highcharts/modules/accessibility';
 import HighchartsDataGrouping from 'highcharts/modules/datagrouping';
-import HighchartsWindbarb from 'highcharts/modules/windbarb';
 import HighchartsPatternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
 import { getTemperatureChartOptions } from '../utils/chartUtils';
 import { DailyWeather } from '../utils/weatherUtils';
+import "../styles/customChart.scss"
 HighchartsMore(Highcharts);
  
 HighchartsExporting(Highcharts);
 HighchartsExportData(Highcharts);
 HighchartsAccessibility(Highcharts);
 HighchartsDataGrouping(Highcharts);
-HighchartsWindbarb(Highcharts);
+ 
 HighchartsPatternFill(Highcharts);
 
 interface DailyTempChartProps {
@@ -31,7 +31,7 @@ const DailyTempChart: React.FC<DailyTempChartProps> = ({ weatherData }) => {
   }, [weatherData]);
 
   return (
-    <div>
+    <div className='chart-container'>
       <HighchartsReact
         highcharts={Highcharts}
         options={chartOptions}
