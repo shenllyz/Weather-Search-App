@@ -6,6 +6,7 @@ import MenuButtons from './components/MenuButtons';
 import ErrorAlert from './components/ErrorAlert';
 import Favorite from './components/Favorite';
 import ProgressBarComponent from './components/ProgressBarComponent';
+import { DailyWeather } from './utils/weatherUtils';
 
 function App() {
   const [city, setCity] = useState('');
@@ -15,16 +16,19 @@ function App() {
   const [showProgressBar, setShowProgressBar] = useState(false);
   const [progress, setProgress] = useState(0);
   const [apiError, setApiError] = useState(false);
+  const [dailyWeatherData, setDailyWeatherData] = useState<DailyWeather[]>([]);
 
-  const handleSearch = (city: string, state: string) => {
+  const handleSearch = (city: string, state: string, dailyData: DailyWeather[]) => {
     setCity(city);
     setState(state);
+    setDailyWeatherData(dailyData);
     setShowResult(true);
   };
 
   const handleClear = () => {
     setCity('');
     setState('');
+    setDailyWeatherData([]);
     setShowResult(false);
   };
 
@@ -44,7 +48,7 @@ function App() {
         setApiError={setApiError}
       />
       <MenuButtons selectedButton={selectedButton} handleClick={handleClick} />
-      {showResult && selectedButton === 'result' && <Result city={city} state={state} />}
+      {showResult && selectedButton === 'result' && <Result city={city} state={state} dailyWeatherData={dailyWeatherData} />}
       {selectedButton === 'favorite' && <Favorite />}
       {showProgressBar && <ProgressBarComponent progress={progress} />}
       {apiError && <ErrorAlert />}

@@ -4,14 +4,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Tabs from 'react-bootstrap/Tabs';
 import Tab from 'react-bootstrap/Tab';
+import DailyView from './DailyView';
+import DailyTempChart from './DailyTempChart';
 import "../styles/customFontstyle.scss";
+import { DailyWeather } from '../utils/weatherUtils';
 
 interface ResultProps {
   city: string;
   state: string;
+  dailyWeatherData: DailyWeather[];
 }
 
-const Result: React.FC<ResultProps> = ({ city, state }) => {
+const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData }) => {
   return (
     <Container>
       <Row className='text-center mt-5'>
@@ -21,15 +25,15 @@ const Result: React.FC<ResultProps> = ({ city, state }) => {
       </Row>
       <Row className='mt-4'>
         <Col>
-          <Tabs defaultActiveKey="dailyView" id="result-tabs" dir="rtl">
+          <Tabs defaultActiveKey="dailyView" id="result-tabs" dir='rtl'>
             <Tab eventKey="meteogram" title="Meteogram">
               <div>Meteogram Content</div>
             </Tab>
             <Tab eventKey="dailyTempChart" title="Daily Temp. Chart">
-              <div>Daily Temp. Chart Content</div>
+              <DailyTempChart weatherData={dailyWeatherData} />
             </Tab>
             <Tab eventKey="dailyView" title="Daily View">
-              <div>Daily View Content</div>
+              <DailyView weatherData={dailyWeatherData} />
             </Tab>
           </Tabs>
         </Col>

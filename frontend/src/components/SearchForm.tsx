@@ -12,11 +12,12 @@ import '../styles/customCheckbox.scss';
 import '../styles/customContainer.scss';
 import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../utils/formDataHandlers';
 import { states } from '../utils/stateOptions';
+import { parseDailyWeather, parseHourlyWeather, DailyWeather } from '../utils/weatherUtils';
 
 interface SearchFormProps {
   setCity: (city: string) => void;
   setState: (state: string) => void;
-  onSearch: (city: string, state: string) => void;
+  onSearch: (city: string, state: string, dailyData: DailyWeather[]) => void;
   onClear: () => void;
   setShowProgressBar: (show: boolean) => void;
   setProgress: (progress: number) => void;
@@ -143,13 +144,15 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
     try {
       setShowProgressBar(true);
-      setProgress(50);
+      setProgress(40);
       const weatherData = await fetchWeatherData(latitude, longitude);
+      const dailyData = parseDailyWeather(weatherData);
+      parseHourlyWeather(weatherData);
       setProgress(100);
       await new Promise((resolve) => setTimeout(resolve, 300));
       setCity(city);
       setState(state);
-      onSearch(city, state);
+      onSearch(city, state, dailyData);
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setApiError(true);
@@ -174,8 +177,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   return (
-    <section>
-      <Container className="customContainer p-4 rounded shadow-md text-center mt-3 ">
+    <section className='p-3'>
+      <Container  className="customContainer p-4 rounded shadow-md text-center">
         <h3 className="header text-center mb-4">Weather Search ⛅</h3>
         <form>
           <Form.Group as={Row} className="align-items-center mb-0">
