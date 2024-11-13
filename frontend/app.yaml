@@ -1,7 +1,7 @@
 runtime: nodejs20
 
 handlers:
-  - url: /images
+  - url: /Images
     static_dir: build/Images
   - url: /
     static_files: build/index.html
