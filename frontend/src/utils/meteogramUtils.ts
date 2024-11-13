@@ -87,7 +87,7 @@ class Meteogram {
         align: 'center',
         style: {
           whiteSpace: 'nowrap',
-          textOverflow: 'ellipsis',
+        //   textOverflow: 'ellipsis',
         },
       },
       credits: {

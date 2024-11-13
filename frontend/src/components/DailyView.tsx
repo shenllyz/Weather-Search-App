@@ -5,9 +5,10 @@ import { formatDate } from '../utils/formatDate';
 
 interface DailyViewProps {
   weatherData: DailyWeather[];
+  onDetailsClick: (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>, index: number) => void;
 }
 
-const DailyView: React.FC<DailyViewProps> = ({ weatherData }) => {
+const DailyView: React.FC<DailyViewProps> = ({ weatherData,  onDetailsClick }) => {
   return (
     <Table hover responsive>
       <thead>
@@ -25,7 +26,7 @@ const DailyView: React.FC<DailyViewProps> = ({ weatherData }) => {
           <tr key={index} >
             <td className='pb-4'>{index + 1}</td>
             <td className='pb-4'>
-              <a href="#">{formatDate(data.date)}</a>
+            <a href="#" onClick={(e) => onDetailsClick(e, index)}>{formatDate(data.date)}</a>
             </td>
             <td className='pb-4'>
               <div className="d-flex align-items-center">

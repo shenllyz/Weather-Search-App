@@ -12,3 +12,30 @@ export function formatDate(dateString: string): string {
 
     return `${weekday}, ${month} ${day}, ${year}`;
 }
+
+
+export function formatSunrise(sunriseTime: string): string {
+    const sunrise = new Date(sunriseTime);
+
+    const options: Intl.DateTimeFormatOptions = {
+        hour: 'numeric',
+        minute: 'numeric',  
+        hour12: true,
+        timeZone: 'America/Los_Angeles'
+    };
+
+    return sunrise.toLocaleTimeString('en-US', options);
+}
+
+export function formatSunset(sunsetTime: string): string {
+    const sunset = new Date(sunsetTime);
+
+    const options: Intl.DateTimeFormatOptions = {
+        hour: 'numeric',
+        minute: 'numeric',  
+        hour12: true,
+        timeZone: 'America/Los_Angeles'
+    };
+
+    return sunset.toLocaleTimeString('en-US', options);
+}

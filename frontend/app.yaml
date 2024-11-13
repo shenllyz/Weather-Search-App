@@ -1,6 +1,8 @@
 runtime: nodejs20
 
 handlers:
+  - url: /images
+    static_dir: build/Images
   - url: /
     static_files: build/index.html
     upload: build/index.html
@@ -8,7 +10,6 @@ handlers:
     static_files: build/\1
     upload: build/(.*)
 
-# Corrected error handler section
 error_handlers:
   - error_code: default
     file: build/index.html

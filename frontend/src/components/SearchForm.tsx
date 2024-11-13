@@ -17,11 +17,18 @@ import { parseDailyWeather, parseHourlyWeather, DailyWeather,HourlyWeather } fro
 interface SearchFormProps {
   setCity: (city: string) => void;
   setState: (state: string) => void;
-  onSearch: (city: string, state: string, dailyData: DailyWeather[], hourlyData: HourlyWeather[]) => void;
+  onSearch: (
+    city: string, 
+    state: string, 
+    dailyData: DailyWeather[], 
+    hourlyData: HourlyWeather[], 
+    lat: number | null, 
+    lng: number | null) => void;
   onClear: () => void;
   setShowProgressBar: (show: boolean) => void;
   setProgress: (progress: number) => void;
   setApiError: (error: boolean) => void;
+  setNoRecordsAlert: (show: boolean) => void;
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
@@ -32,6 +39,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   setShowProgressBar,
   setProgress,
   setApiError,
+  setNoRecordsAlert,
 }) => {
   const [street, setStreet] = useState('');
   const [cityInput, setCityInput] = useState('');
@@ -63,9 +71,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
     setInputsDisabled(isChecked);
 
     if (isChecked) {
-      setStreet('');
-      setCityInput('');
-      setStateInput('');
       setErrors({});
       setTouchedFields({});
       setIsFormValid(true);
@@ -98,13 +103,15 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   const handleSubmit = async () => {
-    let latitude: number;
-    let longitude: number;
+    let latitude: number | null = null;
+    let longitude:number | null = null;
     let city: string;
     let state: string;
     setApiError(false);
     if (useCurrentLocation) {
       try {
+        setShowProgressBar(true);
+        setProgress(50);
         const ipinfo = await fetchIpInfo();
         latitude = parseFloat(ipinfo.latitude);
         longitude = parseFloat(ipinfo.longitude);
@@ -127,6 +134,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       const address = encodeURIComponent(`${street}, ${cityInput}, ${stateInput}`);
       try {
+        setShowProgressBar(true);
+        setProgress(50);
         const geocodingResult = await fetchGeocodingData(address);
         latitude = geocodingResult.latitude;
         longitude = geocodingResult.longitude;
@@ -144,7 +153,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
     try {
       setShowProgressBar(true);
-      setProgress(40);
+      setProgress(80);
       const weatherData = await fetchWeatherData(latitude, longitude);
       const dailyData = parseDailyWeather(weatherData);
       const hourlyData = parseHourlyWeather(weatherData);
@@ -153,7 +162,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
       await new Promise((resolve) => setTimeout(resolve, 300));
       setCity(city);
       setState(state);
-      onSearch(city, state, dailyData, hourlyData);
+      onSearch(city, state, dailyData, hourlyData, latitude, longitude);
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setApiError(true);
@@ -171,6 +180,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
     setInputsDisabled(false);
     setApiError(false);
     setErrors({});
+    setNoRecordsAlert(false);
     setTouchedFields({});
     setShowProgressBar(false);
     setProgress(0);

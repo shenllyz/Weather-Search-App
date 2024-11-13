@@ -3,3 +3,39 @@
     font-weight: 400;
     font-style: normal;
 }
+.star-fill-yellow {
+    color: #fdfe00;
+    -webkit-text-stroke: 2px #000;
+  }
+.star-stroke-black{
+    color: #000;
+  }
+
+.tab-title{
+    font-size: 1.0rem;
+}
+
+.divider{
+    border: '1px solid black';
+    width: '100%'; 
+}
+
+.trash-icon{
+    background-color: white !important;
+    border: none !important;
+    color:#000 !important;
+}
+
+.trash-icon:hover{
+    background-color: #ececec !important;
+    border: none !important;
+    color:#000 !important;
+}
+@media (max-width: 576px) {
+    .tab-title {
+      font-size: 0.7rem;
+     
+    }
+}
+
+ 
