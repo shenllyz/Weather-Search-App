@@ -24,7 +24,8 @@ function App() {
   const [dailyWeatherData, setDailyWeatherData] = useState<DailyWeather[]>([]); 
   const [hourlyWeatherData, setHourlyWeatherData] = useState<HourlyWeather[]>([]);
 
-  const handleSearch = (city: string, state: string, dailyData: DailyWeather[], hourlyData: HourlyWeather[], lat: number, lng: number) => {
+  const handleSearch = (street: string, city: string, state: string, dailyData: DailyWeather[], hourlyData: HourlyWeather[], lat: number, lng: number) => {
+    setStreet(street);
     setCity(city);
     setState(state);
     setLat(lat);
@@ -35,6 +36,7 @@ function App() {
   };
 
   const handleClear = () => {
+    setStreet('');
     setCity('');
     setState('');
     setLat(0);
@@ -51,6 +53,7 @@ function App() {
   return (
     <div className="App">
       <SearchForm
+        setStreet={setStreet}
         setCity={setCity}
         setState={setState}
         onSearch={handleSearch}
@@ -64,7 +67,8 @@ function App() {
       {showProgressBar && <ProgressBarComponent progress={progress} />}
       {apiError && <ErrorAlert />}
       {showResult && selectedButton === 'result' && (
-        <Result 
+        <Result
+          street={street} 
           city={city} 
           state={state} 
           dailyWeatherData={dailyWeatherData}  

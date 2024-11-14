@@ -55,3 +55,21 @@ export const states: StateOption[] = [
     { name: 'Wisconsin', value: 'WI' },
     { name: 'Wyoming', value: 'WY' },
   ];
+
+  export const formatState = (input: string): string => {
+    const formattedInput = input.trim().toLowerCase();
+    const matchedState = states.find(
+      (state) => state.name.toLowerCase() === formattedInput
+    );
+    return matchedState ? matchedState.name : '';
+  };
+
+  export const StateValidation = (input: string): boolean => {  
+    return states.some(
+      (state) => state.name.toLowerCase() ===  input.toLowerCase()
+    );
+  }
+
+  export const findStateByValue = (value: string): StateOption | undefined => {
+    return states.find((state) => state.value === value);
+  };

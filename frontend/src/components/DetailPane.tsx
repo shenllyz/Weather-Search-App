@@ -22,7 +22,9 @@ interface DetailPaneProps {
 
 const DetailPane: React.FC<DetailPaneProps> = ({weatherData, geoData, onBackToListClick}) => {
     const handleTwitterShare = () => {
-        let tweetPost = `The temperature in ${geoData.city}, ${geoData.state} `;            
+        let tweetPost = `The temperature in `;
+        (geoData.street && geoData.street.trim())!== ''? tweetPost += `${geoData.street}, ` : tweetPost += '';            
+        tweetPost += `${geoData.city}, ${geoData.state} `;
         tweetPost += `on ${formatDate(weatherData.date)} `;
         tweetPost += `is ${weatherData.temperatureApparent}°F. `;
         tweetPost += `The weather conditions are ${getWeatherDescription(weatherData.weatherCode)} `;

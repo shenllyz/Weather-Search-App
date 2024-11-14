@@ -9,6 +9,7 @@ import Slide from '@mui/material/Slide';
 import ResultContent from './ResultContent';
 
 interface ResultProps {
+  street?: string;
   city: string;
   state: string;
   dailyWeatherData: DailyWeather[];
@@ -17,7 +18,7 @@ interface ResultProps {
   lng: number;
 }
 
-const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWeatherData, lat, lng,}) => {
+const Result: React.FC<ResultProps> = ({street, city, state, dailyWeatherData, hourlyWeatherData, lat, lng,}) => {
   const [activeTab, setActiveTab] = useState<string>('dailyView');
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [showDetailPane, setShowDetailPane] = useState<boolean>(false);
@@ -48,6 +49,7 @@ const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWe
 
   const selectedWeather = dailyWeatherData[selectedWeatherIndex];
   const geoData = {
+    street,
     city,
     state,
     latitude: lat,
@@ -57,7 +59,7 @@ const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWe
   return (
     <Container className='px-0'>
       <Row>
-        <Col>
+        <Col xs={12}>
           <Slide direction="right" in={!showDetailPane && fromListButton} mountOnEnter unmountOnExit>
             <div>
               <ResultContent
@@ -94,7 +96,7 @@ const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWe
         </Col>
         
         <Col xs={12}>
-          <Slide direction="left" in={showDetailPane} mountOnEnter unmountOnExit timeout={500}>
+          <Slide direction="left" in={showDetailPane} mountOnEnter unmountOnExit timeout={2000}>
             <div>
               <DetailPane weatherData={selectedWeather} geoData={geoData} onBackToListClick={handleBackToListClick} />
             </div>

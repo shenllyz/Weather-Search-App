@@ -9,7 +9,7 @@ interface DetailPaneMapProps {
   longitude: number;
 }
 
-const DetailPaneMap: React.FC<DetailPaneMapProps> = ({ latitude =34.0522, longitude=-118 }) => {
+const DetailPaneMap: React.FC<DetailPaneMapProps> = ({ latitude, longitude}) => {
   const [apiKey, setApiKey] = useState<string | null>(null);
 
   useEffect(() => {

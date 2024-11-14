@@ -11,13 +11,15 @@ import Form from 'react-bootstrap/Form';
 import '../styles/customCheckbox.scss';
 import '../styles/customContainer.scss';
 import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../utils/formDataHandlers';
-import { states } from '../utils/stateOptions';
+import { StateValidation, formatState, findStateByValue} from '../utils/stateOptions';
 import { parseDailyWeather, parseHourlyWeather, DailyWeather,HourlyWeather } from '../utils/weatherUtils';
 
 interface SearchFormProps {
+  setStreet: (street: string) => void;
   setCity: (city: string) => void;
   setState: (state: string) => void;
   onSearch: (
+    street: string,
     city: string, 
     state: string, 
     dailyData: DailyWeather[], 
@@ -32,6 +34,7 @@ interface SearchFormProps {
 }
 
 const SearchForm: React.FC<SearchFormProps> = ({
+  setStreet,
   setCity,
   setState,
   onSearch,
@@ -41,7 +44,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
   setApiError,
   setNoRecordsAlert,
 }) => {
-  const [street, setStreet] = useState('');
+  const [street, setStreetInput] = useState('');
   const [cityInput, setCityInput] = useState('');
   const [stateInput, setStateInput] = useState('');
   const [useCurrentLocation, setUseCurrentLocation] = useState(false);
@@ -84,8 +87,13 @@ const SearchForm: React.FC<SearchFormProps> = ({
       if (fieldName !== 'state') {
         errorMessage = `Please enter a valid ${fieldName}`;
       } else {
-        errorMessage = 'Please select a state';
+        errorMessage = 'Please select a valid state';
       }
+    } else if (fieldName === 'state') {
+      const isValidState = StateValidation(value);
+      if (!isValidState) {
+        errorMessage = 'Invalid state selected';
+      } 
     }
 
     setErrors((prevErrors) => ({
@@ -96,7 +104,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   const handleCitySelect = (selectedCityState: { city: string; state: string }) => {
     setCityInput(selectedCityState.city);
-    const selectedState = states.find((stateObj) => stateObj.value === selectedCityState.state);
+    const selectedState = findStateByValue(selectedCityState.state);
     if (selectedState) {
       setStateInput(selectedState.name);
     }
@@ -140,7 +148,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
         latitude = geocodingResult.latitude;
         longitude = geocodingResult.longitude;
         city = cityInput;
-        state = stateInput;
+        state = formatState(stateInput);
+        console.log('state:', state);
       } catch (error) {
         console.error('Error fetching geocoding data:', error);
         setApiError(true);
@@ -160,9 +169,10 @@ const SearchForm: React.FC<SearchFormProps> = ({
        
       setProgress(100);
       await new Promise((resolve) => setTimeout(resolve, 300));
+      setStreet(street);
       setCity(city);
       setState(state);
-      onSearch(city, state, dailyData, hourlyData, latitude, longitude);
+      onSearch(street, city, state, dailyData, hourlyData, latitude, longitude);
     } catch (error) {
       console.error('Error fetching weather data:', error);
       setApiError(true);
@@ -173,7 +183,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
   const handleClear = () => {
     setUseCurrentLocation(false);
-    setStreet('');
+    setStreetInput('');
     setCityInput('');
     setStateInput('');
     setIsFormValid(false);
@@ -203,7 +213,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
               <StreetInput
                 value={street}
                 onStreetChange={(value) => {
-                  setStreet(value);
+                  setStreetInput(value);
                   validateField('street', value);
                 }}
                 onBlur={() => {
@@ -266,6 +276,9 @@ const SearchForm: React.FC<SearchFormProps> = ({
                 disabled={inputsDisabled}
                 error={!!errors.state}
               />
+                {touchedFields.state && errors.state && (
+                <div className="text-danger text-md-start">{errors.state}</div>
+              )}
             </Col>
           </Form.Group>
           <Row className="mt-3">
