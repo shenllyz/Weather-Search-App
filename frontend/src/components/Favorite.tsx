@@ -3,12 +3,13 @@ import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
 import '../styles/customFontstyle.scss'; 
-
-interface FavoriteProps {
+import ProgressBarComponent from './ProgressBarComponent';
+ 
+export interface FavoriteProps {
   city: string;
   state: string;
-  lat: number | null;
-  lng: number | null;
+  lat: number;
+  lng: number;
   _id: string;
 }
 
@@ -18,14 +19,19 @@ interface FavoriteComponentProps {
 
 const Favorite: React.FC<FavoriteComponentProps> = ({ setShowNoRecordsAlert }) => {
   const [favorites, setFavorites] = useState<FavoriteProps[]>([]);
-
+  const [loading, setLoading] = useState<boolean>(true);
+  const [progress, setProgress] = useState<number>(0);  
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
+        setLoading(true);
+        setProgress(30); 
         const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/get_all_favorites_locations');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
+        setProgress(100);
+        await new Promise((resolve) => setTimeout(resolve, 200));
         const data = await response.json();
         console.log('Favorites:', data);
         setFavorites(data);
@@ -33,6 +39,8 @@ const Favorite: React.FC<FavoriteComponentProps> = ({ setShowNoRecordsAlert }) =
       } catch (error) {
         console.error('Error fetching favorites:', error);
         setShowNoRecordsAlert(true);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -51,11 +59,13 @@ const Favorite: React.FC<FavoriteComponentProps> = ({ setShowNoRecordsAlert }) =
       console.error('Error removing favorite:', error);
     }
   };
-
+  if (loading) {
+    return <ProgressBarComponent progress={progress}/>;
+  }
   return (
     <Container className='mt-5'>
-      <hr className='divider' />
-      <Table hover responsive>
+      <hr className='divider mb-1' />
+      <Table hover responsive className='mt-1'>
         <thead>
           <tr className="text-start">
             <th className="fw-bold">#</th>

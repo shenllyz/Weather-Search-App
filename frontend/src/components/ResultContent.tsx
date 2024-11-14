@@ -66,7 +66,7 @@ const ResultContent: React.FC<ResultContentProps> = ({
                 <Nav.Link eventKey="dailyView" href="#res">Day View</Nav.Link>
               </Nav.Item>
             </Nav>
-            <Tab.Content className='mt-3'>
+            <Tab.Content className='mt-1'>
               <Tab.Pane eventKey="meteogram" unmountOnExit>
                 <MeteogramComponent weatherData={hourlyWeatherData} />
               </Tab.Pane>
