@@ -10,10 +10,11 @@ import ProgressBarComponent from './components/ProgressBarComponent';
 import { DailyWeather, HourlyWeather} from './utils/weatherUtils';
 
 function App() {
+  const [street, setStreet] = useState('');
   const [city, setCity] = useState('');
   const [state, setState] = useState('');
-  const [lat, setLat] = useState<number | null>(null);
-  const [lng, setLng] = useState<number | null>(null);
+  const [lat, setLat] = useState(0);
+  const [lng, setLng] = useState(0);
   const [showResult, setShowResult] = useState(false);
   const [selectedButton, setSelectedButton] = useState<string | null>('result');
   const [showProgressBar, setShowProgressBar] = useState(false);
@@ -23,7 +24,7 @@ function App() {
   const [dailyWeatherData, setDailyWeatherData] = useState<DailyWeather[]>([]); 
   const [hourlyWeatherData, setHourlyWeatherData] = useState<HourlyWeather[]>([]);
 
-  const handleSearch = (city: string, state: string, dailyData: DailyWeather[], hourlyData: HourlyWeather[], lat: number | null, lng: number | null) => {
+  const handleSearch = (city: string, state: string, dailyData: DailyWeather[], hourlyData: HourlyWeather[], lat: number, lng: number) => {
     setCity(city);
     setState(state);
     setLat(lat);
@@ -36,8 +37,8 @@ function App() {
   const handleClear = () => {
     setCity('');
     setState('');
-    setLat(null);
-    setLng(null);
+    setLat(0);
+    setLng(0);
     setDailyWeatherData([]);
     setHourlyWeatherData([]);
     setShowResult(false);

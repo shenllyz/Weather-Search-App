@@ -1,23 +1,20 @@
 import React, { useState } from 'react'; 
-import {  Row, Col, Nav, Tab } from 'react-bootstrap';
 import Container from 'react-bootstrap/Container';
-import DailyView from './DailyView';
-import DailyTempChart from './DailyTempChart';
-import MeteogramComponent from './Meteogram';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 import "../styles/customFontstyle.scss";
 import { DailyWeather, HourlyWeather } from '../utils/weatherUtils';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import FavoriteButton from './FavoriteButton';
 import DetailPane from './DetailPane';
 import Slide from '@mui/material/Slide';
+import ResultContent from './ResultContent';
 
 interface ResultProps {
   city: string;
   state: string;
   dailyWeatherData: DailyWeather[];
   hourlyWeatherData: HourlyWeather[];
-  lat: number | null;
-  lng: number | null;
+  lat: number;
+  lng: number;
 }
 
 const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWeatherData, lat, lng,}) => {
@@ -25,6 +22,7 @@ const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWe
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [showDetailPane, setShowDetailPane] = useState<boolean>(false);
   const [selectedWeatherIndex, setSelectedWeatherIndex] = useState<number>(0);
+  const [fromListButton, setFromListButton] = useState<boolean>(false);
 
   const handleFavoriteClick = () => {
     setIsFavorite(prevIsFavorite => !prevIsFavorite);
@@ -34,75 +32,75 @@ const Result: React.FC<ResultProps> = ({ city, state, dailyWeatherData, hourlyWe
     event.preventDefault();
     setSelectedWeatherIndex(index);
     setShowDetailPane(true);
+    setFromListButton(false);
   };
 
   const handleDefaultDetailsClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     event.preventDefault();
     setShowDetailPane(true);
+    setFromListButton(false);
+  };
+
+  const handleBackToListClick = () => {
+    setShowDetailPane(false);
+    setFromListButton(true);
   };
 
   const selectedWeather = dailyWeatherData[selectedWeatherIndex];
+  const geoData = {
+    city,
+    state,
+    latitude: lat,
+    longitude: lng,
+  };
 
   return (
     <Container className='px-0'>
-      <Slide direction="right" in={!showDetailPane} mountOnEnter unmountOnExit>
-        <div>
-          <Row className='text-center mt-5'>
-          <Col>
-            <h2 className='result-title fs-3 fs-md-2'>Forecast at {city}, {state}</h2>
-          </Col>
-        </Row>
-
-        <Row className=' mt-3'>
-          <Col className='text-end'>
-            <FavoriteButton 
-              onClick={handleFavoriteClick} 
-              isFavorite={isFavorite}
-            />
-            <a href="#" className='text-dark' onClick={handleDefaultDetailsClick}>
-              <span className='m-2'>Details<ArrowForwardIosIcon/></span>
-            </a>  
-          </Col>
-        </Row>
-
-        <Row className='mt-4' id='res'>
-          <Col>
-            <Tab.Container activeKey={activeTab} onSelect={(k) => setActiveTab(k || 'dailyView')}>
-              <Nav variant="tabs" dir='rtl' className='px-0'>
-                <Nav.Item>
-                  <Nav.Link  eventKey="meteogram" href="#res">Meteogram</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="dailyTempChart" href="#res">Daily Temp. Chart</Nav.Link>
-                </Nav.Item>
-                <Nav.Item>
-                  <Nav.Link eventKey="dailyView" href="#res">Day View</Nav.Link>
-                </Nav.Item>
-              </Nav>
-              <Tab.Content className='mt-3'>
-                <Tab.Pane eventKey="meteogram" unmountOnExit>
-                  <MeteogramComponent weatherData={hourlyWeatherData} />
-                </Tab.Pane>
-                <Tab.Pane eventKey="dailyTempChart" unmountOnExit>
-                  <DailyTempChart weatherData={dailyWeatherData} />
-                </Tab.Pane>
-                <Tab.Pane eventKey="dailyView" unmountOnExit>
-                  <DailyView weatherData={dailyWeatherData} onDetailsClick={handleDetailsClick} />
-                </Tab.Pane>
-              </Tab.Content>
-            </Tab.Container>
-          </Col>
-        </Row>
-        </div>
+      <Row>
+        <Col>
+          <Slide direction="right" in={!showDetailPane && fromListButton} mountOnEnter unmountOnExit>
+            <div>
+              <ResultContent
+                city={city}
+                state={state}
+                dailyWeatherData={dailyWeatherData}
+                hourlyWeatherData={hourlyWeatherData}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                isFavorite={isFavorite}
+                handleFavoriteClick={handleFavoriteClick}
+                handleDefaultDetailsClick={handleDefaultDetailsClick}
+                handleDetailsClick={handleDetailsClick}
+              />
+            </div>
+          </Slide>
+          
+          {!fromListButton && !showDetailPane && (
+            <div>
+              <ResultContent
+                city={city}
+                state={state}
+                dailyWeatherData={dailyWeatherData}
+                hourlyWeatherData={hourlyWeatherData}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                isFavorite={isFavorite}
+                handleFavoriteClick={handleFavoriteClick}
+                handleDefaultDetailsClick={handleDefaultDetailsClick}
+                handleDetailsClick={handleDetailsClick}
+              />
+            </div>
+          )}
+        </Col>
         
-      </Slide>
-      
-      <Slide direction="left" in={showDetailPane} mountOnEnter unmountOnExit timeout={500}>
-        <div>
-          <DetailPane weatherData={selectedWeather}/>
-        </div>
-           
-      </Slide>
+        <Col xs={12}>
+          <Slide direction="left" in={showDetailPane} mountOnEnter unmountOnExit timeout={500}>
+            <div>
+              <DetailPane weatherData={selectedWeather} geoData={geoData} onBackToListClick={handleBackToListClick} />
+            </div>
+          </Slide>
+        </Col>
+      </Row>
     </Container>
   );
 };

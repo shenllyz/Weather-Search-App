@@ -22,8 +22,8 @@ interface SearchFormProps {
     state: string, 
     dailyData: DailyWeather[], 
     hourlyData: HourlyWeather[], 
-    lat: number | null, 
-    lng: number | null) => void;
+    lat: number, 
+    lng: number) => void;
   onClear: () => void;
   setShowProgressBar: (show: boolean) => void;
   setProgress: (progress: number) => void;
@@ -103,8 +103,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
   };
 
   const handleSubmit = async () => {
-    let latitude: number | null = null;
-    let longitude:number | null = null;
+    let latitude: number;
+    let longitude: number;
     let city: string;
     let state: string;
     setApiError(false);
@@ -153,7 +153,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
     try {
       setShowProgressBar(true);
-      setProgress(80);
+      setProgress(50);
       const weatherData = await fetchWeatherData(latitude, longitude);
       const dailyData = parseDailyWeather(weatherData);
       const hourlyData = parseHourlyWeather(weatherData);

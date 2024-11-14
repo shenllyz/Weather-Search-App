@@ -56,7 +56,7 @@ export const fetchGeocodingData = async (address: string) => {
 };
 
   
-  export const fetchWeatherData = async (lat: number | null, lon: number | null) => {
+  export const fetchWeatherData = async (lat: number, lon: number) => {
     try {
       const weatherUrl = `https://csci571asgm3backend.wl.r.appspot.com/get_weather?latitude=${lat}&longitude=${lon}`;
       const response = await fetch(weatherUrl);

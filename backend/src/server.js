@@ -9,7 +9,8 @@ import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
- 
+const FRONTEND_URL = process.env.FRONTEND_URL;
+
 console.log("Loading environment variables...");
 dotenv.config({ path: path.resolve(__dirname, '../.env') });
 console.log("Environment variables loaded.");
@@ -28,13 +29,24 @@ app.get(['/', '/index'], (req, res) => {
   res.send('Hello from App Engine!');
 });
 
+app.get("/google-maps-api-key", (req, res) => {
+  // if (req.headers.origin === FRONTEND_URL) {
+    try {
+      res.json({ apikey: googleMapsAPIkey });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve Google Maps API key" });      
+  } 
+// }else {
+//     res.status(403).json({ error: "Forbidden", message: "Invalid origin" });
+//   }
+});
 
 app.get('/get_IPlocation', (req, res) => {
-  try {
-    res.json({ token: ipToken });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to retrieve IP token" });
-  }
+    try {
+      res.json({ token: ipToken });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to retrieve IP token" });
+    }
 });
 
 app.get('/autocomplete', async (req, res) => {
