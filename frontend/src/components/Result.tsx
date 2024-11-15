@@ -47,12 +47,10 @@ const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, 
 
   const handleFavoriteClick = async () => {
     if (isFavorite) {
-      // Remove from favorites
       if (favoriteId) {
         await handleRemove(favoriteId);
       }
     } else {
-      // Add to favorites
       try {
         const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/add_favorite_location', {
           method: 'POST',

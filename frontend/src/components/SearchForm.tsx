@@ -10,6 +10,7 @@ import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import '../styles/customCheckbox.scss';
 import '../styles/customContainer.scss';
+import '../styles/customFontstyle.scss';
 import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../utils/formDataHandlers';
 import { StateValidation, formatState, findStateByValue} from '../utils/stateOptions';
 import { parseDailyWeather, parseHourlyWeather, DailyWeather,HourlyWeather } from '../utils/weatherUtils';
@@ -282,25 +283,31 @@ const SearchForm: React.FC<SearchFormProps> = ({
           </Form.Group>
           <Row className="mt-3">
             <Col xs={12} md={8}>
-              <hr style={{ border: '1px solid black', width: '100%' }} />
+              <hr className='divider' />
             </Col>
           </Row>
           <Row className="mb-3 justify-content-center">
             <Col xs={12} md={6}>
               <Form.Group>
-                <Form.Label htmlFor="autodetect-location" className="me-3">
-                  Autodetect Location<span style={{ color: 'red' }}>*</span>
+                <Form.Label htmlFor="autodetect-location" className="me-3 responsive-text">
+                  <span className='text-part'>Autodetect</span> 
+                  <span className='text-part'>Location<span style={{ color: 'red' }}>*</span></span>
+                   
                 </Form.Label>
-                <input
-                  type="checkbox"
-                  id="autodetect-location"
-                  name="autodetect-location"
-                  className="mb-2 me-1 custom-checkbox"
-                  checked={useCurrentLocation}
-                  onChange={handleCheckboxChange}
-                />
-                <Form.Label htmlFor="current-location" className="form-check-label">
-                  Current Location
+                <Form.Label htmlFor="current-location" className="form-check-label responsive-text">
+                 
+                  <span className='text-part'>
+                  <input
+                    type="checkbox"
+                    id="autodetect-location"
+                    name="autodetect-location"
+                    className="mb-2 me-1 custom-checkbox"
+                    checked={useCurrentLocation}
+                    onChange={handleCheckboxChange}
+                  />
+                  Current
+                  </span>
+                  <span className='text-part'>Location</span>
                 </Form.Label>
               </Form.Group>
             </Col>
