@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react'; 
 import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Carousel from 'react-bootstrap/Carousel';
 import "../styles/customFontstyle.scss";
 import { DailyWeather, HourlyWeather } from '../utils/weatherUtils';
 import DetailPane from './DetailPane';
-import Slide from '@mui/material/Slide';
 import ResultContent from './ResultContent';
 
 interface FavoriteProps {
@@ -56,7 +54,7 @@ const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, 
     } else {
       // Add to favorites
       try {
-        const response = await fetch('http://127.0.0.1:8001/add_favorite_location', {
+        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/add_favorite_location', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -120,46 +118,25 @@ const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, 
 
   return (
     <Container className='px-0'>
-        <div>
-          <Slide direction="right" in={!showDetailPane && fromListButton} mountOnEnter unmountOnExit >
-            <div>
-              <ResultContent
-                city={city}
-                state={state}
-                dailyWeatherData={dailyWeatherData}
-                hourlyWeatherData={hourlyWeatherData}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                isFavorite={isFavorite}
-                handleFavoriteClick={handleFavoriteClick}
-                handleDefaultDetailsClick={handleDefaultDetailsClick}
-                handleDetailsClick={handleDetailsClick}
-              />
-            </div>
-          </Slide>
-          
-          {!fromListButton && !showDetailPane && (
-            <div>
-              <ResultContent
-                city={city}
-                state={state}
-                dailyWeatherData={dailyWeatherData}
-                hourlyWeatherData={hourlyWeatherData}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                isFavorite={isFavorite}
-                handleFavoriteClick={handleFavoriteClick}
-                handleDefaultDetailsClick={handleDefaultDetailsClick}
-                handleDetailsClick={handleDetailsClick}
-              />
-            </div>
-          )} 
-          <Slide direction="left" in={showDetailPane} mountOnEnter unmountOnExit >
-            <div>
-              <DetailPane weatherData={selectedWeather} geoData={geoData} onBackToListClick={handleBackToListClick} />
-            </div>
-          </Slide>
-        </div>
+      <Carousel className="custom-carousel" activeIndex={showDetailPane ? 1 : 0} controls={false} indicators={false} interval={null}>
+        <Carousel.Item>
+          <ResultContent
+            city={city}
+            state={state}
+            dailyWeatherData={dailyWeatherData}
+            hourlyWeatherData={hourlyWeatherData}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            isFavorite={isFavorite}
+            handleFavoriteClick={handleFavoriteClick}
+            handleDefaultDetailsClick={handleDefaultDetailsClick}
+            handleDetailsClick={handleDetailsClick}
+          />
+        </Carousel.Item>
+        <Carousel.Item>
+          <DetailPane weatherData={selectedWeather} geoData={geoData} onBackToListClick={handleBackToListClick} />
+        </Carousel.Item>
+      </Carousel>
     </Container>
   );
 };

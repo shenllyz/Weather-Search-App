@@ -15,7 +15,7 @@ const DetailPaneMap: React.FC<DetailPaneMapProps> = ({ latitude, longitude}) => 
   useEffect(() => {
     const fetchApiKey = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8001/google-maps-api-key');
+        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/google-maps-api-key');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
