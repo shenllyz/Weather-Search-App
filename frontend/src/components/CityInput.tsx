@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Autocomplete } from '@mui/material';
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 interface CityInputProps {
   value: string;
   onCityChange: (value: string) => void;
@@ -25,7 +25,7 @@ const CityInput: React.FC<CityInputProps> = ({ value, onCityChange, onCitySelect
     }
     try {
       const response = await fetch(
-        `https://csci571asgm3backend.wl.r.appspot.com/autocomplete?input=${inputValue}`
+        `${BACKEND_URL}/autocomplete?input=${inputValue}`
       );
       if (!response.ok) {
         throw new Error('Failed to fetch autocomplete options');

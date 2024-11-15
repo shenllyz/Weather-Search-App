@@ -7,6 +7,7 @@ import ProgressBarComponent from './ProgressBarComponent';
 import { fetchWeatherData } from '../utils/formDataHandlers';
 import { parseDailyWeather, parseHourlyWeather, DailyWeather, HourlyWeather } from '../utils/weatherUtils';
 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export interface FavoriteProps {
   city: string;
   state: string;
@@ -50,7 +51,7 @@ const Favorite: React.FC<FavoriteComponentProps> = ({
       try {
         setShowProgressBar(true);
         setProgress(30); 
-        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/get_all_favorites_locations');
+        const response = await fetch(`${BACKEND_URL}/get_all_favorites_locations`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -73,7 +74,7 @@ const Favorite: React.FC<FavoriteComponentProps> = ({
 
   const handleRemove = async (id: string) => {
     try {
-      await fetch(`https://csci571asgm3backend.wl.r.appspot.com/delete_favorite_location/${id}`, {
+      await fetch(`${BACKEND_URL}/delete_favorite_location/${id}`, {
         method: 'DELETE',
       });
       const updatedFavorites = favorites.filter(favorite => favorite._id !== id);

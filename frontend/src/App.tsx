@@ -8,6 +8,8 @@ import NoRecordsAlert from './components/NoRecordsAlert';
 import Favorite from './components/Favorite';
 import ProgressBarComponent from './components/ProgressBarComponent';
 import { DailyWeather, HourlyWeather } from './utils/weatherUtils';
+ 
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export interface FavoriteProps {
   city: string;
@@ -36,7 +38,7 @@ function App() {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/get_all_favorites_locations');
+        const response = await fetch(`${BACKEND_URL}/get_all_favorites_locations`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

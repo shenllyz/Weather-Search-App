@@ -5,7 +5,7 @@ import "../styles/customFontstyle.scss";
 import { DailyWeather, HourlyWeather } from '../utils/weatherUtils';
 import DetailPane from './DetailPane';
 import ResultContent from './ResultContent';
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 interface FavoriteProps {
   city: string;
   state: string;
@@ -52,7 +52,7 @@ const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, 
       }
     } else {
       try {
-        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/add_favorite_location', {
+        const response = await fetch(`${BACKEND_URL}/add_favorite_location`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, 
 
   const handleRemove = async (id: string) => {
     try {
-      await fetch(`https://csci571asgm3backend.wl.r.appspot.com/delete_favorite_location/${id}`, {
+      await fetch(`${BACKEND_URL}/delete_favorite_location/${id}`, {
         method: 'DELETE',
       });
       const updatedFavorites = favorites.filter(favorite => favorite._id !== id);

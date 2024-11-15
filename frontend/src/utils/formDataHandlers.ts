@@ -1,6 +1,8 @@
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
 export const fetchIpInfo = async () => {
   try {
-    const ipTokenResponse = await fetch('https://csci571asgm3backend.wl.r.appspot.com/get_IPlocation');
+    const ipTokenResponse = await fetch(`${BACKEND_URL}/get_IPlocation`);
     if (!ipTokenResponse.ok) {
       throw new Error(`Error fetching IP token: ${ipTokenResponse.status}`);
     }
@@ -32,7 +34,7 @@ export const fetchIpInfo = async () => {
 
 export const fetchGeocodingData = async (address: string) => {
   try {
-    const response = await fetch(`https://csci571asgm3backend.wl.r.appspot.com/get_geocoding?address=${address}`);
+    const response = await fetch(`${BACKEND_URL}/get_geocoding?address=${address}`);
     if (!response.ok) {
       throw new Error(`Error fetching Geocoding data: ${response.status}`);
     }
@@ -57,7 +59,7 @@ export const fetchGeocodingData = async (address: string) => {
   
   export const fetchWeatherData = async (lat: number, lon: number) => {
     try {
-      const weatherUrl = `https://csci571asgm3backend.wl.r.appspot.com/get_weather?latitude=${lat}&longitude=${lon}`;
+      const weatherUrl = `${BACKEND_URL}/get_weather?latitude=${lat}&longitude=${lon}`;
       const response = await fetch(weatherUrl);
       if (!response.ok) {
         throw new Error(`Error fetching weather data: ${response.status}`);
