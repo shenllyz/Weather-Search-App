@@ -3,7 +3,6 @@ import { DailyWeather } from './weatherUtils';
 
 export function getTemperatureChartOptions(dailyWeatherData: DailyWeather[]) {
   const temperatureData: [number, number, number][] = [];
-  console.log(dailyWeatherData);
   dailyWeatherData.forEach((entry) => {
     const date = new Date(entry.date).getTime();
     const tempMin = entry.temperatureMin;

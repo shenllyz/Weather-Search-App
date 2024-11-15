@@ -142,8 +142,8 @@ app.get('/get_weather', async (req, res) => {
 app.post('/add_favorite_location', async (req, res) => {
   const { city, state, lat, lng } = req.body;
   try {
-    await insertLocationValue(city, state, lat, lng);
-    res.status(200).json({ message: "Value inserted successfully" });
+    const newFavorite = await insertLocationValue(city, state, lat, lng);
+    res.status(200).json(newFavorite);
   } catch (error) {
     res.status(500).json({ error: "Failed to add favorite" });
   }

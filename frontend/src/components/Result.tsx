@@ -7,7 +7,7 @@ import { DailyWeather, HourlyWeather } from '../utils/weatherUtils';
 import DetailPane from './DetailPane';
 import Slide from '@mui/material/Slide';
 import ResultContent from './ResultContent';
- 
+
 interface FavoriteProps {
   city: string;
   state: string;
@@ -24,43 +24,28 @@ interface ResultProps {
   hourlyWeatherData: HourlyWeather[];
   lat: number;
   lng: number;
+  favorites: FavoriteProps[];
+  setFavorites: (favorites: FavoriteProps[]) => void;
 }
 
-const Result: React.FC<ResultProps> = ({street, city, state, dailyWeatherData, hourlyWeatherData, lat, lng,}) => {
+const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, hourlyWeatherData, lat, lng, favorites, setFavorites }) => {
   const [activeTab, setActiveTab] = useState<string>('dailyView');
   const [isFavorite, setIsFavorite] = useState<boolean>(false);
   const [showDetailPane, setShowDetailPane] = useState<boolean>(false);
   const [selectedWeatherIndex, setSelectedWeatherIndex] = useState<number>(0);
   const [fromListButton, setFromListButton] = useState<boolean>(false);
-  const [favorites, setFavorites] = useState<FavoriteProps[]>([]);
   const [favoriteId, setFavoriteId] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/get_all_favorites_locations');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setFavorites(data);
-
-        const favorite = data.find((fav: FavoriteProps) => fav.city === city && fav.state === state);
-        if (favorite) {
-          setIsFavorite(true);
-          setFavoriteId(favorite._id);
-        } else {
-          setIsFavorite(false);
-          setFavoriteId(null);
-        }
-      } catch (error) {
-        console.error('Error fetching favorites:', error);
-      }
-    };
-
-    fetchFavorites();
-  }, [city, state]);
-
+    const favorite = favorites.find((fav: FavoriteProps) => fav.city === city && fav.state === state);
+    if (favorite) {
+      setIsFavorite(true);
+      setFavoriteId(favorite._id);
+    } else {
+      setIsFavorite(false);
+      setFavoriteId(null);
+    }
+  }, [city, state, favorites]);
 
   const handleFavoriteClick = async () => {
     if (isFavorite) {
@@ -71,7 +56,7 @@ const Result: React.FC<ResultProps> = ({street, city, state, dailyWeatherData, h
     } else {
       // Add to favorites
       try {
-        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/add_favorite_location', {
+        const response = await fetch('http://127.0.0.1:8001/add_favorite_location', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -83,6 +68,7 @@ const Result: React.FC<ResultProps> = ({street, city, state, dailyWeatherData, h
         }
         const newFavorite = await response.json();
         setFavorites([...favorites, newFavorite]);
+        console.log('favorites:', [...favorites, newFavorite]); 
         setIsFavorite(true);
         setFavoriteId(newFavorite._id);
       } catch (error) {
@@ -90,7 +76,6 @@ const Result: React.FC<ResultProps> = ({street, city, state, dailyWeatherData, h
       }
     }
   };
-
 
   const handleRemove = async (id: string) => {
     try {
@@ -136,7 +121,7 @@ const Result: React.FC<ResultProps> = ({street, city, state, dailyWeatherData, h
   return (
     <Container className='px-0'>
         <div>
-          <Slide direction="right" in={!showDetailPane && fromListButton} mountOnEnter unmountOnExit timeout={2000}>
+          <Slide direction="right" in={!showDetailPane && fromListButton} mountOnEnter unmountOnExit >
             <div>
               <ResultContent
                 city={city}
@@ -169,7 +154,7 @@ const Result: React.FC<ResultProps> = ({street, city, state, dailyWeatherData, h
               />
             </div>
           )} 
-          <Slide direction="left" in={showDetailPane} mountOnEnter unmountOnExit timeout={2000}>
+          <Slide direction="left" in={showDetailPane} mountOnEnter unmountOnExit >
             <div>
               <DetailPane weatherData={selectedWeather} geoData={geoData} onBackToListClick={handleBackToListClick} />
             </div>

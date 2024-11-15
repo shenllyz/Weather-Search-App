@@ -149,7 +149,6 @@ const SearchForm: React.FC<SearchFormProps> = ({
         longitude = geocodingResult.longitude;
         city = cityInput;
         state = formatState(stateInput);
-        console.log('state:', state);
       } catch (error) {
         console.error('Error fetching geocoding data:', error);
         setApiError(true);

@@ -46,6 +46,7 @@ export async function insertLocationValue(city, state, lat, lng) {
     const newValue = { city, state, lat, lng };
     const result = await collection.insertOne(newValue);
     console.log(`Inserted new value: _id: ${result.insertedId}, city: ${city}, state: ${state}, lat: ${lat}, lng: ${lng}`);
+    return{ _id: result.insertedId, city, state, lat, lng };
   } finally {
     await client.close();
   }

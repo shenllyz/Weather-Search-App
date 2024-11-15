@@ -41,7 +41,6 @@ export const fetchGeocodingData = async (address: string) => {
       const location = data.results[0].geometry.location;
       const latitude = location.lat;
       const longitude = location.lng;
-      console.log(data);
       const formattedAddress = data.results[0].formatted_address;
       console.log({ latitude, longitude, formattedAddress });
       return { latitude, longitude, formattedAddress };
@@ -65,7 +64,6 @@ export const fetchGeocodingData = async (address: string) => {
       }
       const data = await response.json();
       if (data.data) {
-        console.log(data);
         return data;
       } else {
         console.error('Weather API error:', data.error);
