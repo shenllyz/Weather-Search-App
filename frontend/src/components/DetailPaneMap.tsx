@@ -40,7 +40,7 @@ const DetailPaneMap: React.FC<DetailPaneMapProps> = ({ latitude, longitude}) => 
             <Map
             mapId={'DEMO-MAP'}
             style={{ width: '100%', height: '100vh' }}
-            center={{ lat: latitude, lng: longitude }}
+            defaultCenter={{ lat: latitude, lng: longitude}}
             defaultZoom={10}
             gestureHandling={'greedy'}
             key={`${latitude}-${longitude}`}
