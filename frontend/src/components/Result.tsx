@@ -113,7 +113,7 @@ const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, 
     latitude: lat,
     longitude: lng,
   };
-
+    console.log({geoData});
   return (
     <Container className='px-0'>
       <Carousel className="custom-carousel" activeIndex={showDetailPane ? 1 : 0} controls={false} indicators={false} interval={null}>
@@ -132,6 +132,7 @@ const Result: React.FC<ResultProps> = ({ street, city, state, dailyWeatherData, 
           />
         </Carousel.Item>
         <Carousel.Item>
+          
           <DetailPane weatherData={selectedWeather} geoData={geoData} onBackToListClick={handleBackToListClick} />
         </Carousel.Item>
       </Carousel>

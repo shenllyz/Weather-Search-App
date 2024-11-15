@@ -15,7 +15,7 @@ const DetailPaneMap: React.FC<DetailPaneMapProps> = ({ latitude, longitude}) => 
   useEffect(() => {
     const fetchApiKey = async () => {
       try {
-        const response = await fetch('https://csci571asgm3backend.wl.r.appspot.com/google-maps-api-key');
+        const response = await fetch('http://localhost:8001/google-maps-api-key');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -40,10 +40,10 @@ const DetailPaneMap: React.FC<DetailPaneMapProps> = ({ latitude, longitude}) => 
             <Map
             mapId={'DEMO-MAP'}
             style={{ width: '100%', height: '100vh' }}
-            defaultCenter={{ lat: latitude, lng: longitude}}
+            center={{ lat: latitude, lng: longitude }}
             defaultZoom={10}
             gestureHandling={'greedy'}
-             
+            key={`${latitude}-${longitude}`}
             >
             <AdvancedMarker position={{ lat: latitude, lng: longitude }} />
             </Map>
