@@ -109,6 +109,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
     const selectedState = findStateByValue(selectedCityState.state);
     if (selectedState) {
       setStateInput(selectedState.name);
+      validateField('state', selectedState.name);
     }
   };
 
