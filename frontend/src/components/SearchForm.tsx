@@ -64,7 +64,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
         !errors.state &&
         street.trim() !== '' &&
         cityInput.trim() !== '' &&
-        stateInput.trim() !== '';
+        stateInput.trim() !== '' &&
+        StateValidation(stateInput);
       setIsFormValid(isValid);
     }
   }, [errors, street, cityInput, stateInput, useCurrentLocation]);
