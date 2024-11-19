@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import { getWeatherDescription, getWeatherIcon, DailyWeather } from '../utils/weatherUtils';
-import { formatDate } from '../utils/formatDate';
+import { getWeatherDescription, getWeatherIcon, DailyWeather } from '../../../utils/weatherUtils';
+import { formatDate } from '../../../utils/formatDate';
 
 interface DailyViewProps {
   weatherData: DailyWeather[];

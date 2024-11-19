@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'; 
 import Container from 'react-bootstrap/Container';
 import Carousel from 'react-bootstrap/Carousel';
-import "../styles/customFontstyle.scss";
-import { DailyWeather, HourlyWeather } from '../utils/weatherUtils';
-import DetailPane from './DetailPane';
-import ResultContent from './ResultContent';
+import "../../styles/customFontstyle.scss";
+import { DailyWeather, HourlyWeather } from '../../utils/weatherUtils';
+import DetailPane from './details/DetailPane';
+import ResultContent from './results/ResultContent';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 interface FavoriteProps {
   city: string;

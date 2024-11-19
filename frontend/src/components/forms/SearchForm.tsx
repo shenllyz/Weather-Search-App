@@ -1,19 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import SelectState from './SelectState';
-import SearchButton from './SearchButton';
-import ClearButton from './ClearButton';
+import SearchButton from '../buttons/SearchButton';
+import ClearButton from '../buttons/ClearButton';
 import StreetInput from './StreetInput';
 import CityInput from './CityInput';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
-import '../styles/customCheckbox.scss';
-import '../styles/customContainer.scss';
-import '../styles/customFontstyle.scss';
-import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../utils/formDataHandlers';
-import { StateValidation, formatState, findStateByValue} from '../utils/stateOptions';
-import { parseDailyWeather, parseHourlyWeather, DailyWeather,HourlyWeather } from '../utils/weatherUtils';
+import '../../styles/customCheckbox.scss';
+import '../../styles/customContainer.scss';
+import '../../styles/customFontstyle.scss';
+import { fetchIpInfo, fetchGeocodingData, fetchWeatherData } from '../../utils/formDataHandlers';
+import { StateValidation, formatState, findStateByValue} from '../../utils/stateOptions';
+import { parseDailyWeather, parseHourlyWeather, DailyWeather,HourlyWeather } from '../../utils/weatherUtils';
 
 interface SearchFormProps {
   setStreet: (street: string) => void;

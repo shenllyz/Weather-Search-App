@@ -6,8 +6,8 @@ import HighchartsAccessibility from 'highcharts/modules/accessibility';
 import HighchartsDataGrouping from 'highcharts/modules/datagrouping';
 import HighchartsPatternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
-import { HourlyWeather } from '../utils/weatherUtils';
-import Meteogram from '../utils/meteogramUtils';
+import { HourlyWeather } from '../../../utils/weatherUtils';
+import Meteogram from '../../../utils/meteogramUtils';
 
 HighchartsWindbarb(Highcharts);
 HighchartsMore(Highcharts);

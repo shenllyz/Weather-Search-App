@@ -5,9 +5,9 @@ import HighchartsAccessibility from 'highcharts/modules/accessibility';
 import HighchartsDataGrouping from 'highcharts/modules/datagrouping';
 import HighchartsPatternFill from 'highcharts/modules/pattern-fill';
 import HighchartsReact from 'highcharts-react-official';
-import { getTemperatureChartOptions } from '../utils/chartUtils';
-import { DailyWeather } from '../utils/weatherUtils';
-import "../styles/customChart.scss"
+import { getTemperatureChartOptions } from '../../../utils/chartUtils';
+import { DailyWeather } from '../../../utils/weatherUtils';
+import "../../../styles/customChart.scss"
 HighchartsMore(Highcharts);
 HighchartsAccessibility(Highcharts);
 HighchartsDataGrouping(Highcharts);

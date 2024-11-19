@@ -1,12 +1,12 @@
 import './App.scss';
 import React, { useState, useEffect } from 'react';
-import SearchForm from './components/SearchForm';
-import Result from './components/Result';
-import MenuButtons from './components/MenuButtons';
-import ErrorAlert from './components/ErrorAlert';
-import NoRecordsAlert from './components/NoRecordsAlert';
-import Favorite from './components/Favorite';
-import ProgressBarComponent from './components/ProgressBarComponent';
+import SearchForm from './components/forms/SearchForm';
+import Result from './components/views/Result';
+import MenuButtons from './components/buttons/MenuButtons';
+import ErrorAlert from './components/alerts/ErrorAlert';
+import NoRecordsAlert from './components/alerts/NoRecordsAlert';
+import Favorite from './components/views/Favorite';
+import ProgressBarComponent from './components/alerts/ProgressBarComponent';
 import { DailyWeather, HourlyWeather } from './utils/weatherUtils';
  
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -21,7 +21,7 @@ export interface FavoriteProps {
 
 function App() {
   const [street, setStreet] = useState('');
-  const [city, setCity] = useState('');
+  const [city, setCity] = useState(''); 
   const [state, setState] = useState('');
   const [lat, setLat] = useState(0);
   const [lng, setLng] = useState(0);

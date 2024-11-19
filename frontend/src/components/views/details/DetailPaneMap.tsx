@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
  
 import { Map, AdvancedMarker,APIProvider} from '@vis.gl/react-google-maps';
-import ErrorAlert from './ErrorAlert';
+import ErrorAlert from '../../alerts/ErrorAlert';
  
 
 interface DetailPaneMapProps {

@@ -1,7 +1,7 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import { getWeatherDescription, DailyWeather } from '../utils/weatherUtils';
-import {  formatDate, formatSunset, formatSunrise } from '../utils/formatDate';
+import { getWeatherDescription, DailyWeather } from '../../../utils/weatherUtils';
+import {  formatDate, formatSunset, formatSunrise } from '../../../utils/formatDate';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';

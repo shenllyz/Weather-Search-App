@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Nav from 'react-bootstrap/Nav';
-import '../styles/customFontstyle.scss'; 
-import ProgressBarComponent from './ProgressBarComponent';
-import { fetchWeatherData } from '../utils/formDataHandlers';
-import { parseDailyWeather, parseHourlyWeather, DailyWeather, HourlyWeather } from '../utils/weatherUtils';
+import '../../styles/customFontstyle.scss'; 
+import ProgressBarComponent from '../alerts/ProgressBarComponent';
+import { fetchWeatherData } from '../../utils/formDataHandlers';
+import { parseDailyWeather, parseHourlyWeather, DailyWeather, HourlyWeather } from '../../utils/weatherUtils';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export interface FavoriteProps {

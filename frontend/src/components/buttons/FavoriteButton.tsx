@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
-import '../styles/customFontstyle.scss';
+import '../../styles/customFontstyle.scss';
 
 interface FavoriteButtonProps {
     onClick: () => void;

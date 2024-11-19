@@ -3,9 +3,9 @@ import { Row, Col, Nav, Tab } from 'react-bootstrap';
 import DailyView from './DailyView';
 import DailyTempChart from './DailyTempChart';
 import MeteogramComponent from './Meteogram';
-import { DailyWeather, HourlyWeather } from '../utils/weatherUtils';
+import { DailyWeather, HourlyWeather } from '../../../utils/weatherUtils';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import FavoriteButton from './FavoriteButton';
+import FavoriteButton from '../../buttons/FavoriteButton';
 
 interface ResultContentProps {
   city: string;
@@ -91,7 +91,7 @@ const ResultContent: React.FC<ResultContentProps> = ({
               <Tab.Pane eventKey="dailyView" unmountOnExit>
                 <DailyView weatherData={dailyWeatherData} onDetailsClick={handleDetailsClick} />
               </Tab.Pane>
-              <div id="bottom"></div> {/* 页面底部的锚点 */}
+              <div id="bottom"></div> 
             </Tab.Content>
           </Tab.Container>
         </Col>

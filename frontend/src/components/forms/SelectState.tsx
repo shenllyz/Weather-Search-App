@@ -1,5 +1,5 @@
 import { TextField, Autocomplete } from '@mui/material';
-import { states } from '../utils/stateOptions';
+import { states } from '../../utils/stateOptions';
 
 interface SelectStateProps {
   value: string;

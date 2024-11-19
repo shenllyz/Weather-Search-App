@@ -3,7 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
-import '../styles/customMenuButton.scss';
+import '../../styles/customMenuButton.scss';
 
 interface MenuButtonsProps {
   selectedButton: string | null;
