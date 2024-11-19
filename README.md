@@ -7,24 +7,24 @@ You can access the live application [here](https://csci571asgm3frontend.wl.r.app
 ## Technologies Used
 
 ### Frontend
-- **React**: For building the user interface.
-- **Bootstrap**: For styling and responsive layout.
-- **MUI (Material-UI)**: For additional components and icons.
-- **HighCharts**: For visualizing weather data.
+- [React](https://reactjs.org/): For building the user interface.
+- [Bootstrap](https://getbootstrap.com/): For styling and responsive layout.
+- [MUI (Material-UI)](https://mui.com/): For additional components and icons.
+- [HighCharts](https://www.highcharts.com/): For visualizing weather data.
 
 ### Backend
-- **Express**: Backend server framework.
-- **MongoDB Atlas**: For storing favorite cities and user information.
+- [Express](https://expressjs.com/): Backend server framework.
+- [MongoDB Atlas](https://www.mongodb.com/atlas): For storing favorite cities and user information.
 
 ### APIs
-- **Tomorrow.io API**: For fetching weather information.
-- **Google Maps API**: For rendering maps in the Detail Pane.
-- **Google Geocoding & Places API**: For address lookup and autocomplete.
-- **IPinfo API**: For detecting the user's current location.
-- **Twitter (X) API**: For sharing weather information on social media.
+- [Tomorrow.io API](https://www.tomorrow.io/weather-api/): For fetching weather information.
+- [Google Maps API](https://developers.google.com/maps/documentation): For rendering maps in the Detail Pane.
+- [Google Geocoding & Places API](https://developers.google.com/maps/documentation/geocoding): For address lookup and autocomplete.
+- [IPinfo API](https://ipinfo.io/): For detecting the user's current location.
+- [Twitter (X) API](https://developer.twitter.com/): For sharing weather information on social media.
 
 ### Cloud
-- **Google Cloud Platform (GCP)**: Hosting the backend on Google App Engine.
+- [Google Cloud Platform (GCP)](https://cloud.google.com/): Hosting the backend on Google App Engine.
 
 ## Getting Started
 
