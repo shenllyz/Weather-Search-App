@@ -1,6 +1,6 @@
 import React from 'react';
 import Table from 'react-bootstrap/Table';
-import { getWeatherDescription, DailyWeather } from '../../../utils/weatherUtils';
+ import { getWeatherDescription, DailyWeather } from '../../../utils/weatherUtils';
 import {  formatDate, formatSunset, formatSunrise } from '../../../utils/formatDate';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -8,6 +8,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import DetailPaneMap from './DetailPaneMap';
+ 
 interface DetailPaneProps {
   weatherData: DailyWeather;
   geoData:{
@@ -21,7 +22,8 @@ interface DetailPaneProps {
 }
 
 const DetailPane: React.FC<DetailPaneProps> = ({weatherData, geoData, onBackToListClick}) => {
-    const handleTwitterShare = () => {
+     
+    const TwitterShare = () => {
         let tweetPost = `The temperature in `;
         (geoData.street && geoData.street.trim())!== ''? tweetPost += `${geoData.street}, ` : tweetPost += '';            
         tweetPost += `${geoData.city}, ${geoData.state} `;
@@ -31,7 +33,7 @@ const DetailPane: React.FC<DetailPaneProps> = ({weatherData, geoData, onBackToLi
         tweetPost += `#CSCI571WeatherSearch`;
 
         const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetPost)}`;
-        window.open(url, '_blank');
+        return url;
       };
   
     return (
@@ -47,9 +49,14 @@ const DetailPane: React.FC<DetailPaneProps> = ({weatherData, geoData, onBackToLi
                 <h3 className='fw-bold'>{formatDate(weatherData.date)}</h3>
             </Col>
             <Col xs={2} className='text-end'>
-                <Button  variant="outline-secondary" className="px-3 py-1 mb-4"  onClick={handleTwitterShare}>
-                        <i className="bi bi-twitter-x fs-3"></i>
+                <Button
+                variant="outline-secondary"
+                className="px-3 py-1 mb-4"
+                href={TwitterShare()}
+                >
+                <i className="bi bi-twitter-x fs-3"></i>
                 </Button>
+
             </Col>
         </Row>
         <Row>
