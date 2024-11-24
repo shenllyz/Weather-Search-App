@@ -47,7 +47,7 @@ function App() {
         setShowNoRecordsAlert(data.length === 0);
       } catch (error) {
         console.error('Error fetching favorites:', error);
-        setShowNoRecordsAlert(true);
+        setApiError(true);
       }
     };
 

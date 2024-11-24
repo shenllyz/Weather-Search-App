@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Map, AdvancedMarker,APIProvider} from '@vis.gl/react-google-maps';
 import ErrorAlert from '../../alerts/ErrorAlert';
  
-
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 interface DetailPaneMapProps {
   latitude: number;
   longitude: number;
@@ -15,7 +15,7 @@ const DetailPaneMap: React.FC<DetailPaneMapProps> = ({ latitude, longitude}) => 
   useEffect(() => {
     const fetchApiKey = async () => {
       try {
-        const response = await fetch('http://localhost:8001/google-maps-api-key');
+        const response = await fetch(`${BACKEND_URL}/google-maps-api-key`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
