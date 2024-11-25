@@ -1,5 +1,6 @@
 runtime: nodejs20
-
+env_variables:
+  NODE_ENV: 'production'
 handlers:
   - url: /Images
     static_dir: build/Images

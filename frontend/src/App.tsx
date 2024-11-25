@@ -36,7 +36,7 @@ function App() {
   const [favorites, setFavorites] = useState<FavoriteProps[]>([]);
 
   useEffect(() => {
-    const fetchFavorites = async () => {
+    const fetchFavorites = async (attempts = 0) => {
       try {
         const response = await fetch(`${BACKEND_URL}/get_all_favorites_locations`);
         if (!response.ok) {
@@ -45,9 +45,16 @@ function App() {
         const data = await response.json();
         setFavorites(data);
         setShowNoRecordsAlert(data.length === 0);
+        setApiError(false);  
       } catch (error) {
         console.error('Error fetching favorites:', error);
-        setApiError(true);
+        if (attempts < 3) { 
+          setTimeout(() => {
+            fetchFavorites(attempts + 1);
+          }, 1000);  
+        } else {
+          setApiError(true);
+        }
       }
     };
 
