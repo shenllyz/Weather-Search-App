@@ -1,34 +1,37 @@
-# Weather Search Application
+# 🌤️ **Weather Search Application**
 
 This project is a web application that allows users to search for weather information using the Tomorrow.io API and display the results on the same page. Users can provide location information either by entering a street address, city, and state, or by detecting their current location. The application includes dynamic validation, a progress bar, error handling, and a favorites tab. The weather details can also be shared on Twitter.
-## Access the Application
+## 🔗 **Access the Application**
 
-You can access the live application [here](https://csci571asgm3frontend.wl.r.appspot.com/).
-## Technologies Used
+You can access the live web application [here](https://csci571asgm3frontend.wl.r.appspot.com/).
 
-### Frontend
+You can also explore the **Android version** of the Weather Search Application [here](https://github.com/shenllyz/Weather-Search-app-android).
+
+## ⚙️**Tech Stack**
+
+### 🖥️ **Frontend**
 - [React](https://reactjs.org/): For building the user interface.
 - [Bootstrap](https://getbootstrap.com/): For styling and responsive layout.
 - [MUI (Material-UI)](https://mui.com/): For additional components and icons.
 - [HighCharts](https://www.highcharts.com/): For visualizing weather data.
 
-### Backend
+### ⚡ **Backend**
 - [Express](https://expressjs.com/): Backend server framework.
 - [MongoDB Atlas](https://www.mongodb.com/atlas): For storing favorite cities and user information.
 
-### APIs
+### 🌐 **APIs**
 - [Tomorrow.io API](https://www.tomorrow.io/weather-api/): For fetching weather information.
 - [Google Maps API](https://developers.google.com/maps/documentation): For rendering maps in the Detail Pane.
 - [Google Geocoding & Places API](https://developers.google.com/maps/documentation/geocoding): For address lookup and autocomplete.
 - [IPinfo API](https://ipinfo.io/): For detecting the user's current location.
 - [Twitter (X) API](https://developer.twitter.com/): For sharing weather information on social media.
 
-### Cloud
+### ☁️ **Cloud**
 - [Google Cloud Platform (GCP)](https://cloud.google.com/): Hosting the backend on Google App Engine.
 
-## Getting Started
+## 🚀 **Getting Started**
 
-### Prerequisites
+### 📋 **Prerequisites**
 - **Node.js**
 - **npm**
 - **MongoDB Atlas account**
@@ -37,7 +40,7 @@ You can access the live application [here](https://csci571asgm3frontend.wl.r.app
 - **IPinfo account**
 - **Twitter Developer account**
 
-### Installation
+### 🛠️ **Installation**
 
 1. Clone the repository:
 
@@ -73,7 +76,7 @@ npm install @emotion/react @emotion/styled @mui/icons-material @mui/material @te
    REACT_APP_BACKEND_URL=your_backend_url
    ```
 
-### Running the Application
+### ▶️ **Running the Application**
 
 1. Start the backend server:
 
@@ -92,7 +95,7 @@ npm start
 
 3. Open your browser and navigate to `http://localhost:3000`.
 
-### Deployment
+### 🚢 **Deployment**
 
 #### Backend Deployment on GCP
 
@@ -115,22 +118,22 @@ npm start
 
 2. Deploy the build folder to your preferred hosting service (e.g., Firebase, Netlify, Vercel).
 
-## Features
+## ✨ **Features**
 
-- **Weather Search**: Search for weather information by entering a street address, city, and state, or by detecting the user's current location.
-- **Dynamic Validation**: Real-time validation of form inputs.
-- **Progress Bar**: Indicates background processing during API calls.
-- **Error Handling**: Displays appropriate error messages for invalid API responses.
-- **Favorites Tab**: Add and remove favorite cities.
-- **Twitter Sharing**: Share weather details on Twitter.
+- 🌎**Weather Search**: Search for weather information by entering a street address, city, and state, or by detecting the user's current location.
+- 📝**Dynamic Validation**: Real-time validation of form inputs.
+- ⏳**Progress Bar**: Indicates background processing during API calls.
+- ⚠️**Error Handling**: Displays appropriate error messages for invalid API responses.
+- ⭐**Favorites Tab**: Add and remove favorite cities.
+- 🐦**Twitter Sharing**: Share weather details on Twitter.
 
  
 
-## License
+## 📄 **License**
 
-This project is licensed under the MIT License.
+This project is licensed under the **MIT License**. See [LICENSE](LICENSE) for details.
 
-## Acknowledgements
+## 🙌 **Acknowledgements**
 - [Tomorrow.io](https://www.tomorrow.io/)
 - [Google Maps API](https://developers.google.com/maps)
 - [IPinfo](https://ipinfo.io/)
