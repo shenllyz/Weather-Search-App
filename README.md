@@ -7,6 +7,11 @@ You can access the live web application [here](https://csci571asgm3frontend.wl.r
 
 You can also explore the **Android version** of the Weather Search Application [here](https://github.com/shenllyz/Weather-Search-app-android).
 
+## 🎞️ **Demo Videos**
+
+- **Desktop Version Demo**: [here](https://drive.google.com/file/d/19nYVhjzqYMpr0Vv_RyOpyCoAIaNhW-CU/view?usp=drive_link)
+- **Mobile Version Demo**: [here](https://drive.google.com/file/d/1Pynaf0IB7Q9IlvKDrxi4Ua4qEVG6XRHq/view?usp=drive_link)
+---
 ## ⚙️**Tech Stack**
 
 ### 🖥️ **Frontend**
